@@ -7,7 +7,7 @@ T9602::T9602()
 
 uint8_t T9602::begin(uint8_t ADR_)
 {
-	ADR = ADR_; //Remove??
+	ADR = ADR_;
 	Wire.begin();
 }
 
@@ -76,5 +76,5 @@ String T9602::GetString()
 
 bool T9602::Sleep()
 {
-	//Add sleep command 
+	//Add sleep command
 }
