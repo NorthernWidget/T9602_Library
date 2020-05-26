@@ -48,7 +48,7 @@ float T9602::GetTemperature()  //Return temp in C
 
 String T9602::GetHeader()
 {
-	return "Humidity [%], Temp Atmos [C],";
+	return "Humidity [%],Temp Atmos [C],";
 }
 
 String T9602::GetString()
