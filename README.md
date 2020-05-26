@@ -15,6 +15,10 @@
     * ±0.5°C
   * 14 bit resolution
 
+[Data sheet](https://www.amphenol-sensors.com/en/component/edocman/304-telaire-t9602-humidity-temperature-sensor-datasheet/download?Itemid=8487%20%27) for the full T9602 series.
+
+[Application guide for the ChipCap® 2 Humidity and Temperature Sensor](https://www.amphenol-sensors.com/en/component/edocman/397-telaire-chipcap2-humidity-and-temperature-sensor-application-guide/download?Itemid=8487%20%27) (core unit within the T9602). Importantly, this includes a guide to the I2C bus. This library operates only using the default I2C address (0x28), so you will need to consult this and this library (and make a pull request, please!) if you want to allow for different addresses to be set/used.
+
 ## Sensor options
 
 Our two most commonly used sensors are:
