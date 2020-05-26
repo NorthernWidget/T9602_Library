@@ -17,7 +17,7 @@ Library for the IP67-rated [T9602](#classT9602) I2C temperature and relative hum
 `public float `[`GetHumidity`](#classT9602_1a30e06ab6f9dff84709bbdcef85d16d76)`()` | Return the current relative humidity [%].
 `public float `[`GetTemperature`](#classT9602_1adebdebe1f0fff529b18d9fb6d0f5ef3b)`()` | Return the current temperature [degrees C].
 `public String `[`GetString`](#classT9602_1a3c0f5fcff66cf07bd060d7ecf728eec5)`()` | The most important function for the user! Returns all data as a comma-separated string: "RH,T,".
-`public String `[`GetHeader`](#classT9602_1aba872ee7bac2a1fe3634bfd024176863)`()` | Return the header as an Arduino string: "Humidity [%],Temp Atmos [C],".
+`public String `[`GetHeader`](#classT9602_1aba872ee7bac2a1fe3634bfd024176863)`()` | Return the header as an Arduino string: "Relative Humidity [%],Temp Atmos [C],".
 `public bool `[`Sleep`](#classT9602_1a3383fee31401eea45e245f5df780927d)`()` | Dummy function to enable sleep mode.
 
 ## Members
@@ -49,7 +49,7 @@ This string is: "RELATIVE_HUMIDITY,TEMPERATURE,". It is written with the code: r
 
 #### `public String `[`GetHeader`](#classT9602_1aba872ee7bac2a1fe3634bfd024176863)`()` 
 
-Return the header as an Arduino string: "Humidity [%],Temp Atmos [C],".
+Return the header as an Arduino string: "Relative Humidity [%],Temp Atmos [C],".
 
 #### `public bool `[`Sleep`](#classT9602_1a3383fee31401eea45e245f5df780927d)`()` 
 

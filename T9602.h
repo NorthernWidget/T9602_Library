@@ -45,7 +45,7 @@ class T9602
 
     /**
 	   * @brief Return the header as an Arduino string:
-     * "Humidity [%],Temp Atmos [C],"
+     * "Relative Humidity [%],Temp Atmos [C],"
 	   */
 		String GetHeader();
 
