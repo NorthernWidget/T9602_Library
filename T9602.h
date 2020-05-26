@@ -38,7 +38,7 @@ class T9602
     /**
 	   * @brief The most important function for the user! Returns all data as a
 	   * comma-separated string: "RH,T,".
-	   * @details This string is: "<RELATIVE_HUMIDITY>,<TEMPERATURE>,".
+	   * @details This string is: "RELATIVE_HUMIDITY,TEMPERATURE,".
      * It is written with the code: return String(RH) + "," + String(Temp) + ","
      */
 		String GetString();
