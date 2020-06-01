@@ -56,3 +56,90 @@ We typically snip off the connector at and wire the sensor directly into the scr
 ![T9602 Digi-Key image with connector](https://media.digikey.com/photos/Amphenol%20Photos/T9602%20SERIES.jpg)
 
 ***T9602 and connector.*** *Image from Digi-Key (see links above).*
+
+## Writing a program to connect to the T9602
+
+You should be able to use any standard Arduino device to connect to the T9602 and read its data.
+
+*This code is untested. If you do test it, please confirm that it works and/or create a PR and/or an issue for it to be fixed.*
+
+### Very simple Arduino code
+
+This code is intended for any generic Arduino system.
+
+```c++
+// Include the Symbiont library
+#include "SymbiontLiDAR"
+
+// Declare variables -- just as strings
+String header;
+String data;
+
+// Instantiate class
+T9602 mySensor;
+
+void setup(){
+    // Begin Serial connection to computer at 38400 baud
+    Serial.begin(38400);
+    // Obtain the header just once
+    header = mySensor.getHeader();
+    // Print the header to the serial monitor
+    Serial.println(header);
+}
+
+void loop(){
+    // Take one reading every (10 + time to take reading) seconds
+    // and print it to the screen
+    mySensor.updateMeasurements();
+    data = mySensor.getString();
+    Serial.println(data);
+    delay(10000); // Wait 10 seconds before the next reading, inefficiently
+}
+```
+
+### Northern Widget Margay code
+
+The [Margay data logger](github.com/NorthernWidget-Skunkworks/Project-Margay) is the lightweight and low-power open-source data-logging option from Northern Widget. It saves data to a local SD card and includes on-board status measurements and a low-drift real-time clock. We have written [a library to interface with the Margay](github.com/NorthernWidget-Skunkworks/Margay_Library), which can in turn be used to link the Margay with sensors.
+
+```c++
+// Include the Symbiont library
+#include "Margay.h"
+#include "SymbiontLiDAR.h"
+
+// Declare variables -- just as strings
+String header;
+String data;
+
+// Instantiate classes
+T9602 mySensor;
+Margay Logger(Model_2v0, Build_B); // Margay v2.2; UPDATE CODE TO INDICATE THIS
+
+// Empty header to start; will include sensor labels and information
+String Header = "";
+
+// I2C address for T9602
+uint8_t I2CVals[] = {0x28};
+
+//Number of seconds between readings
+uint32_t updateRate = 60;
+
+void setup(){
+    Header = Header + mySensor.GetHeader();
+    Logger.begin(I2CVals, sizeof(I2CVals), Header);
+    init();
+}
+
+void loop(){
+    init();
+    Logger.Run(update, updateRate);
+}
+
+String update() {
+    init()
+    return mySensor.GetString();
+}
+
+void init(){
+    mySensor.begin();
+}
+```
