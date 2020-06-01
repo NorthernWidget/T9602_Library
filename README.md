@@ -68,8 +68,8 @@ You should be able to use any standard Arduino device to connect to the T9602 an
 This code is intended for any generic Arduino system.
 
 ```c++
-// Include the Symbiont library
-#include "SymbiontLiDAR"
+// Include the T9602 library
+#include "T9602"
 
 // Declare variables -- just as strings
 String header;
@@ -102,9 +102,9 @@ void loop(){
 The [Margay data logger](github.com/NorthernWidget-Skunkworks/Project-Margay) is the lightweight and low-power open-source data-logging option from Northern Widget. It saves data to a local SD card and includes on-board status measurements and a low-drift real-time clock. We have written [a library to interface with the Margay](github.com/NorthernWidget-Skunkworks/Margay_Library), which can in turn be used to link the Margay with sensors.
 
 ```c++
-// Include the Symbiont library
+// Include the T9602 library
 #include "Margay.h"
-#include "SymbiontLiDAR.h"
+#include "T9602.h"
 
 // Declare variables -- just as strings
 String header;
