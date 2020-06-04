@@ -69,7 +69,7 @@ This code is intended for any generic Arduino system.
 
 ```c++
 // Include the T9602 library
-#include "T9602"
+#include "T9602.h"
 
 // Declare variables -- just as strings
 String header;
@@ -124,22 +124,22 @@ uint8_t I2CVals[] = {0x28};
 uint32_t updateRate = 60;
 
 void setup(){
-    Header = Header + mySensor.GetHeader();
+    Header = Header + mySensor.getHeader();
     Logger.begin(I2CVals, sizeof(I2CVals), Header);
-    init();
+    initialize();
 }
 
 void loop(){
-    init();
+    initialize();
     Logger.Run(update, updateRate);
 }
 
 String update() {
-    init()
-    return mySensor.GetString();
+    initialize();
+    return mySensor.getString();
 }
 
-void init(){
+void initialize(){
     mySensor.begin();
 }
 ```
