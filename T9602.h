@@ -26,12 +26,17 @@ class T9602
 		uint8_t begin(uint8_t ADR_ = 0x28); //use default address
 
     /**
-	   * @brief Return the current relative humidity [%]
+     * @brief Measure relative humidity [%] and temperature [degrees C].
+     */    
+    void updateMeasurements();
+
+    /**
+	   * @brief Return the stored relative humidity [%]
 	   */
 		float getHumidity();
 
     /**
-	   * @brief Return the current temperature [degrees C]
+	   * @brief Return the stored temperature [degrees C]
 	   */
 		float getTemperature();
 
@@ -40,8 +45,10 @@ class T9602
 	   * comma-separated string: "RH,T,".
 	   * @details This string is: "RELATIVE_HUMIDITY,TEMPERATURE,".
      * It is written with the code: return String(RH) + "," + String(Temp) + ","
+     * @param[in] takeNewReadings: if `true` run `updateMeasurements` before
+     * returning values. Otherwise, just return values.
      */
-		String getString();
+		String getString(bool takeNewReadings = false);
 
     /**
 	   * @brief Return the header as an Arduino string:
@@ -57,6 +64,8 @@ class T9602
 
 	private:
 		uint8_t ADR = 0x28; //Default global sensor address
+		float RH = -9999;
+		float Temp = -9999;
 };
 
 #endif
