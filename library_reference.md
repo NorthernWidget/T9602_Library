@@ -14,11 +14,12 @@ Library for the IP67-rated [T9602](#classT9602) I2C temperature and relative hum
 --------------------------------|---------------------------------------------
 `public  `[`T9602`](#classT9602_1a91354c67d1916d8d9da94075cef2dffe)`()` | Instantiate the [T9602](#classT9602) sensor class.
 `public uint8_t `[`begin`](#classT9602_1a1a002c81b52d785bc6484f506729f290)`(uint8_t ADR_)` | Begin communications with the [T9602](#classT9602) sensor.
-`public float `[`GetHumidity`](#classT9602_1a30e06ab6f9dff84709bbdcef85d16d76)`()` | Return the current relative humidity [%].
-`public float `[`GetTemperature`](#classT9602_1adebdebe1f0fff529b18d9fb6d0f5ef3b)`()` | Return the current temperature [degrees C].
-`public String `[`GetString`](#classT9602_1a3c0f5fcff66cf07bd060d7ecf728eec5)`()` | The most important function for the user! Returns all data as a comma-separated string: "RH,T,".
-`public String `[`GetHeader`](#classT9602_1aba872ee7bac2a1fe3634bfd024176863)`()` | Return the header as an Arduino string: "Relative Humidity [%],Temp Atmos [C],".
-`public bool `[`Sleep`](#classT9602_1a3383fee31401eea45e245f5df780927d)`()` | Dummy function to enable sleep mode.
+`public void `[`updateMeasurements`](#classT9602_1a9408c612d13b436276e85517eb2b6e33)`()` | Measure relative humidity [%] and temperature [degrees C].
+`public float `[`getHumidity`](#classT9602_1ad867bc9c22051598efb382bebddc71f0)`()` | Return the stored relative humidity [%].
+`public float `[`getTemperature`](#classT9602_1a4dcf77a0576e47ea169969ba06816430)`()` | Return the stored temperature [degrees C].
+`public String `[`getString`](#classT9602_1aa13c978b79aa0ab0a82676757c88cefa)`(bool takeNewReadings)` | The most important function for the user! Returns all data as a comma-separated string: "RH,T,".
+`public String `[`getHeader`](#classT9602_1a1c142e679718be0af6c894d189645d3a)`()` | Return the header as an Arduino string: "Relative Humidity [%],Temp Atmos [C],".
+`public bool `[`sleep`](#classT9602_1aa2b24ba14c280c5219f8b5346a1fe02b)`()` | Dummy function to enable sleep mode.
 
 ## Members
 
@@ -33,25 +34,31 @@ Begin communications with the [T9602](#classT9602) sensor.
 #### Parameters
 * `ADR_` I2C address. Defaults to 0x28. This library cannot change this, but this option exists in case you make this change elsewhere.
 
-#### `public float `[`GetHumidity`](#classT9602_1a30e06ab6f9dff84709bbdcef85d16d76)`()` 
+#### `public void `[`updateMeasurements`](#classT9602_1a9408c612d13b436276e85517eb2b6e33)`()` 
 
-Return the current relative humidity [%].
+Measure relative humidity [%] and temperature [degrees C].
 
-#### `public float `[`GetTemperature`](#classT9602_1adebdebe1f0fff529b18d9fb6d0f5ef3b)`()` 
+#### `public float `[`getHumidity`](#classT9602_1ad867bc9c22051598efb382bebddc71f0)`()` 
 
-Return the current temperature [degrees C].
+Return the stored relative humidity [%].
 
-#### `public String `[`GetString`](#classT9602_1a3c0f5fcff66cf07bd060d7ecf728eec5)`()` 
+#### `public float `[`getTemperature`](#classT9602_1a4dcf77a0576e47ea169969ba06816430)`()` 
+
+Return the stored temperature [degrees C].
+
+#### `public String `[`getString`](#classT9602_1aa13c978b79aa0ab0a82676757c88cefa)`(bool takeNewReadings)` 
 
 The most important function for the user! Returns all data as a comma-separated string: "RH,T,".
 
-This string is: "RELATIVE_HUMIDITY,TEMPERATURE,". It is written with the code: return String(RH) + "," + String(Temp) + ","
+This string is: "RELATIVE_HUMIDITY,TEMPERATURE,". It is written with the code: return String(RH) + "," + String(Temp) + "," 
+#### Parameters
+* `takeNewReadings` if `true` run `updateMeasurements` before returning values. Otherwise, just return values.
 
-#### `public String `[`GetHeader`](#classT9602_1aba872ee7bac2a1fe3634bfd024176863)`()` 
+#### `public String `[`getHeader`](#classT9602_1a1c142e679718be0af6c894d189645d3a)`()` 
 
 Return the header as an Arduino string: "Relative Humidity [%],Temp Atmos [C],".
 
-#### `public bool `[`Sleep`](#classT9602_1a3383fee31401eea45e245f5df780927d)`()` 
+#### `public bool `[`sleep`](#classT9602_1aa2b24ba14c280c5219f8b5346a1fe02b)`()` 
 
 Dummy function to enable sleep mode.
 
