@@ -11,7 +11,7 @@ uint8_t T9602::begin(uint8_t ADR_)
 	Wire.begin();
 }
 
-float T9602::GetHumidity()  //Return humidity in % (realtive)
+float T9602::getHumidity()  //Return humidity in % (realtive)
 {
 	float RH = 0; //Calulated RH value
 	uint8_t Data[2] = {0}; //Array for raw data from device
@@ -28,7 +28,7 @@ float T9602::GetHumidity()  //Return humidity in % (realtive)
 	return RH;
 }
 
-float T9602::GetTemperature()  //Return temp in C
+float T9602::getTemperature()  //Return temp in C
 {
 	float Temp = 0; //Calulated temp value
 	uint8_t Data[2] = {0}; //Array for raw data from device
@@ -46,12 +46,12 @@ float T9602::GetTemperature()  //Return temp in C
 	return Temp;
 }
 
-String T9602::GetHeader()
+String T9602::getHeader()
 {
 	return "Humidity [%],Temp Atmos [C],";
 }
 
-String T9602::GetString()
+String T9602::getString()
 {
 	float Temp = 0; //Calulated temp value
 	float RH = 0; //Calulated RH value
@@ -74,7 +74,7 @@ String T9602::GetString()
 	return String(RH) + "," + String(Temp) + ",";
 }
 
-bool T9602::Sleep()
+bool T9602::sleep()
 {
 	//Add sleep command
 }

@@ -28,12 +28,12 @@ class T9602
     /**
 	   * @brief Return the current relative humidity [%]
 	   */
-		float GetHumidity();
+		float getHumidity();
 
     /**
 	   * @brief Return the current temperature [degrees C]
 	   */
-		float GetTemperature();
+		float getTemperature();
 
     /**
 	   * @brief The most important function for the user! Returns all data as a
@@ -41,19 +41,19 @@ class T9602
 	   * @details This string is: "RELATIVE_HUMIDITY,TEMPERATURE,".
      * It is written with the code: return String(RH) + "," + String(Temp) + ","
      */
-		String GetString();
+		String getString();
 
     /**
 	   * @brief Return the header as an Arduino string:
      * "Relative Humidity [%],Temp Atmos [C],"
 	   */
-		String GetHeader();
+		String getHeader();
 
     /**
 	   * @brief Dummy function to enable sleep mode.
      * @details Currently not used. Instead, we simply power the sensor down.
 	   */
-		bool Sleep();
+		bool sleep();
 
 	private:
 		uint8_t ADR = 0x28; //Default global sensor address
