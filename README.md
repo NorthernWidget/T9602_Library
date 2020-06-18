@@ -143,3 +143,12 @@ void initialize(){
     mySensor.begin();
 }
 ```
+
+## Acknowledgments
+
+Support for this project provided by:
+
+<img src="https://pbs.twimg.com/profile_images/1139626463932637186/qCak0yvY_400x400.png" alt="UMN ESCI" width="240px">
+<br/>
+<br/>
+<img src="https://www.nsf.gov/news/mmg/media/images/nsf_logo_f_ba321daf-8607-41d7-94bc-1db6039d7893.jpg" alt="NSF" width="240px">
