@@ -65,7 +65,7 @@ You should be able to use any standard Arduino device to connect to the T9602 an
 
 ### Very simple Arduino code
 
-This code is intended for any generic Arduino system.
+This code is intended for any generic Arduino system. It is not proven.
 
 ```c++
 // Include the T9602 library
