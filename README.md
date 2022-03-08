@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6338379.svg)](https://doi.org/10.5281/zenodo.6338379)
+
 # T9602_Library
 
 ***Arduino library interface for the [Telaire T9602 humidity and temperature sensor](https://www.amphenol-sensors.com/en/telaire/humidity/527-humidity-sensors/3224-t9602)***
