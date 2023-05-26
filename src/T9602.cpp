@@ -5,7 +5,7 @@ T9602::T9602()
 {
 }
 
-uint8_t T9602::begin(uint8_t ADR_)
+void T9602::begin(uint8_t ADR_)
 {
 	ADR = ADR_;
 	Wire.begin();
@@ -71,5 +71,6 @@ String T9602::getString(bool takeNewReadings)
 bool T9602::sleep()
 {
 	//Add sleep command
+	return false;
 }
 

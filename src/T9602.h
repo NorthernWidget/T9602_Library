@@ -23,7 +23,7 @@ class T9602
      *                  cannot change this, but this option exists
      *                  in case you make this change elsewhere.
 	   */
-		uint8_t begin(uint8_t ADR_ = 0x28); //use default address
+		void begin(uint8_t ADR_ = 0x28); //use default address
 
     /**
      * @brief Measure relative humidity [%] and temperature [degrees C].
