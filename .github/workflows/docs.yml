@@ -1,0 +1,9 @@
+name: Deploy Doxygen docs to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  docs:
+    uses: NorthernWidget/.github/.github/workflows/deploy-docs.yml@main
