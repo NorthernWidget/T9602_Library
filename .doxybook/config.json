@@ -1,0 +1,9 @@
+{
+  "baseUrl": "/T9602_Library/",
+  "indexInFolders": true,
+  "linkSuffix": "/",
+  "fileExt": "md",
+  "mainPageInRoot": true,
+  "mainPageName": "index",
+  "sort": false
+}
