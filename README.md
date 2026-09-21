@@ -99,6 +99,8 @@ void loop(){
 }
 ```
 
+`updateMeasurements()` sends a measurement request and then fetches data until the sensor's status bits report a valid, not-yet-fetched measurement. It returns `true` on success and `false` after `T9602_TIMEOUT_MS` (250 ms by default; define it before the include to change it) without valid data, in which case the stored values are -9999. `getStatus()` returns the last status bits: 0 valid, 1 stale (already fetched since the last measurement cycle), 2 command mode (the sensor is still starting up), 3 no data (no sensor answered). `getString(true)` takes a new reading before returning it.
+
 ### Northern Widget Margay code
 
 The [Margay data logger](github.com/NorthernWidget-Skunkworks/Project-Margay) is the lightweight and low-power open-source data-logging option from Northern Widget. It saves data to a local SD card and includes on-board status measurements and a low-drift real-time clock. We have written [a library to interface with the Margay](github.com/NorthernWidget-Skunkworks/Margay_Library), which can in turn be used to link the Margay with sensors.
@@ -145,6 +147,10 @@ void initialize(){
     mySensor.begin();
 }
 ```
+
+## Testing
+
+`extras/test/run.sh` compiles the library on a desktop against stub `Arduino.h` and `Wire.h` that emulate the ChipCap 2 status bits, and checks that the output for fixed sensor behaviour is byte-identical to `extras/test/baseline.txt`. Run it after any change; `--record` rewrites the baseline when an output change is intended.
 
 ## Acknowledgments
 
