@@ -1,0 +1,28 @@
+#######################################
+# Syntax Coloring Map for T9602_Library
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+T9602	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+updateMeasurements	KEYWORD2
+getHumidity	KEYWORD2
+getTemperature	KEYWORD2
+getStatus	KEYWORD2
+getString	KEYWORD2
+getHeader	KEYWORD2
+sleep	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+T9602_TIMEOUT_MS	LITERAL1
