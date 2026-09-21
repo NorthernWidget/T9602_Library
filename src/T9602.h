@@ -4,6 +4,14 @@
 #include "Arduino.h"
 #include "Wire.h"
 
+/// Longest wait for valid data in updateMeasurements() [ms]. The ChipCap 2
+/// core takes up to 165 ms per measurement cycle in Update mode and up to
+/// 55 ms to start up (Amphenol AAS-916-127, Table 5). Override before the
+/// include if needed.
+#ifndef T9602_TIMEOUT_MS
+#define T9602_TIMEOUT_MS 250
+#endif
+
 /**
  * @class T9602
  * @brief Library for the IP67-rated T9602 I2C temperature and relative
@@ -27,8 +35,22 @@ class T9602
 
     /**
      * @brief Measure relative humidity [%] and temperature [degrees C].
-     */    
-    void updateMeasurements();
+     * @details Sends a measurement request, then fetches data until the
+     * sensor's status bits report a valid (not yet fetched) measurement,
+     * or until `T9602_TIMEOUT_MS` passes.
+     * @return `true` if a valid measurement was read. `false` on timeout
+     * (stale or no data, sensor in command mode, or no sensor): the stored
+     * values are then -9999.
+     */
+    bool updateMeasurements();
+
+    /**
+     * @brief Status bits from the last data fetch.
+     * @return 0: valid data; 1: stale data (already fetched since the last
+     * measurement cycle); 2: sensor in command mode (start-up);
+     * 3: no data (no sensor on the bus).
+     */
+    uint8_t getStatus();
 
     /**
 	   * @brief Return the stored relative humidity [%]
@@ -64,6 +86,7 @@ class T9602
 
 	private:
 		uint8_t ADR = 0x28; //Default global sensor address
+		uint8_t status = 3; //Status bits from the last data fetch
 		float RH = -9999;
 		float Temp = -9999;
 };

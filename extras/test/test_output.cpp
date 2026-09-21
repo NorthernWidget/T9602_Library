@@ -19,8 +19,9 @@ static void sensor(float rh0, float t0, float rh1, float t1, uint32_t cycleMs, u
 
 static void report(const char* name, T9602& s) {
     uint32_t t0 = millis(); unsigned n0 = Wire.transactions;
-    s.updateMeasurements();
-    printf("[%s] took %u ms, %u fetches: %s\n", name, (unsigned)(millis() - t0), Wire.transactions - n0, s.getString().c_str());
+    bool ok = s.updateMeasurements();
+    printf("[%s] ok=%d status=%u, took %u ms, %u fetches: %s\n", name, ok, s.getStatus(),
+           (unsigned)(millis() - t0), Wire.transactions - n0, s.getString().c_str());
 }
 
 int main() {
