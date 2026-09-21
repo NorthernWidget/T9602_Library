@@ -25,7 +25,8 @@ static void report(const char* name, T9602& s) {
 }
 
 int main() {
-    T9602 s; s.begin();
+    T9602 s;
+    printf("begin: %d\n", s.begin());
     printf("header: %s\n", s.getHeader().c_str());
 
     // 1. Fresh data waiting: status 00 on the first fetch.
@@ -42,6 +43,7 @@ int main() {
 
     // 4. Sensor absent: no ACK, reads return 0xFF.
     sensor(0, 0, 0, 0, 100, 0, false); Wire.present = false;
+    printf("begin with no sensor: %d\n", s.begin());
     report("absent", s);
 
     // 5. getString(true) must take a new reading.

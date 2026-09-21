@@ -4,10 +4,12 @@ T9602::T9602()
 {
 }
 
-void T9602::begin(uint8_t ADR_)
+bool T9602::begin(uint8_t ADR_)
 {
 	ADR = ADR_;
 	Wire.begin();
+	Wire.beginTransmission(ADR);
+	return Wire.endTransmission() == 0; //ACK?
 }
 
 bool T9602::updateMeasurements(){

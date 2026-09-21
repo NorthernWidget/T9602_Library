@@ -30,8 +30,9 @@ class T9602
 	   * @param[in] ADR_: I2C address. Defaults to 0x28. This library
      *                  cannot change this, but this option exists
      *                  in case you make this change elsewhere.
+     * @return `true` if the sensor acknowledges its address on the bus.
 	   */
-		void begin(uint8_t ADR_ = 0x28); //use default address
+		bool begin(uint8_t ADR_ = 0x28); //use default address
 
     /**
      * @brief Measure relative humidity [%] and temperature [degrees C].
