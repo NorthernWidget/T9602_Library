@@ -4,11 +4,14 @@ authors:
 - family-names: "Schulz"
   given-names: "Bobby"
   orcid: "https://orcid.org/0000-0002-9272-4756"
+  affiliation: "Northern Widget LLC"
 - family-names: "Wickert"
   given-names: "Andrew D."
   orcid: "https://orcid.org/0000-0002-9545-3365"
+  affiliation: "University of Minnesota, Department of Earth & Environmental Sciences"
 title: "T9602_Library"
 version: 1.0.0
 doi: 10.5281/zenodo.6338378
 date-released: 2022-03-08
 url: "https://github.com/NorthernWidget/T9602_Library"
+license: GPL-3.0
