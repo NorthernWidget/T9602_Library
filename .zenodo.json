@@ -1,0 +1,26 @@
+{
+  "title": "T9602_Library",
+  "description": "Arduino library interface for the Telaire T9602 humidity and temperature sensor.",
+  "upload_type": "software",
+  "license": {"id": "GPL-3.0-only"},
+  "creators": [
+    {
+      "name": "Schulz, Bobby",
+      "orcid": "0000-0002-9272-4756",
+      "affiliation": "Northern Widget LLC"
+    },
+    {
+      "name": "Wickert, Andrew D.",
+      "orcid": "0000-0002-9545-3365",
+      "affiliation": "University of Minnesota, Department of Earth & Environmental Sciences"
+    }
+  ],
+  "keywords": [
+    "Arduino",
+    "humidity sensor",
+    "temperature sensor",
+    "I2C",
+    "Telaire",
+    "Northern Widget"
+  ]
+}
