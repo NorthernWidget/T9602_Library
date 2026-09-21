@@ -1,0 +1,7 @@
+header: Humidity [%],Temp Atmos [C],
+[valid on first fetch] took 0 ms, 1 fetches: 50.00,25.00,
+[stale first, valid at 100 ms] took 0 ms, 1 fetches: 50.00,25.00,
+[command mode for 55 ms] took 0 ms, 1 fetches: 0.00,-40.00,
+[absent] took 0 ms, 1 fetches: 99.99,124.99,
+[getString(true)] 99.99,124.99,
+[getString(false)] 99.99,124.99,
