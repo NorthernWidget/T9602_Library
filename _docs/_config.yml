@@ -1,0 +1,26 @@
+theme: minimal-mistakes-jekyll
+plugins:
+  - jekyll-include-cache
+  - jekyll-seo-tag
+
+title: "T9602 Library"
+description: "Arduino library interface for the Telaire T9602 humidity and temperature sensor"
+baseurl: "/T9602_Library"
+url: "https://docs.northernwidget.com"
+permalink: /:path/
+
+minimal_mistakes_skin: "default"
+
+author:
+  name: "Northern Widget"
+  url: "https://northernwidget.com"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: single
+      toc: true
+      toc_sticky: true
+      sidebar:
+        nav: api
