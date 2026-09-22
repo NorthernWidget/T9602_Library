@@ -1,0 +1,459 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.1 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js" dir="ltr">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>T9602 - T9602 Library</title>
+<meta name="description" content="Arduino library interface for the Telaire T9602 humidity and temperature sensor">
+
+
+  <meta name="author" content="Northern Widget">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="T9602 Library">
+<meta property="og:title" content="T9602">
+<meta property="og:url" content="https://docs.northernwidget.com/T9602_Library/Classes/classT9602/">
+
+
+  <meta property="og:description" content="Arduino library interface for the Telaire T9602 humidity and temperature sensor">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="https://docs.northernwidget.com/T9602_Library/Classes/classT9602/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/T9602_Library/feed.xml" type="application/atom+xml" rel="alternate" title="T9602 Library Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/T9602_Library/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/T9602_Library/">
+          T9602 Library
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/"
+                
+                
+              >Quick-Start Guide</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      
+      
+        <li>
+          
+            <a href="/T9602_Library/"><span class="nav__sub-title">Overview</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/T9602_Library/Classes/classT9602/"><span class="nav__sub-title">T9602 Class</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/T9602_Library/Classes/index_classes/"><span class="nav__sub-title">Classes</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/T9602_Library/Files/index_files/"><span class="nav__sub-title">Files</span></a>
+          
+
+          
+        </li>
+      
+    
+  </ul>
+</nav>
+
+    
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="T9602">
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://docs.northernwidget.com/T9602_Library/Classes/classT9602/" itemprop="url">T9602
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc" aria-label="Table of contents">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-t9602">function T9602</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-getstatus">function getStatus</a></li><li><a href="#function-gethumidity">function getHumidity</a></li><li><a href="#function-gettemperature">function getTemperature</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-sleep">function sleep</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <p>Library for the IP67-rated <a href="">T9602</a> I2C temperature and relative humidity sensor.</p>
+
+<p><code class="language-plaintext highlighter-rouge">#include &lt;T9602.h&gt;</code></p>
+
+<h2 id="public-functions">Public Functions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-t9602">T9602</a></strong>()<br />Instantiate the <a href="/T9602_Library/Classes/classT9602/">T9602</a> sensor class.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-begin">begin</a></strong>(uint8<em>t ADR</em> =0x28)<br />Begin communications with the <a href="/T9602_Library/Classes/classT9602/">T9602</a> sensor.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements</a></strong>()<br />Measure relative humidity [%] and temperature [degrees C].</td>
+    </tr>
+    <tr>
+      <td>uint8_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-getstatus">getStatus</a></strong>()<br />Status bits from the last data fetch.</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gethumidity">getHumidity</a></strong>()<br />Return the stored relative humidity [%].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gettemperature">getTemperature</a></strong>()<br />Return the stored temperature [degrees C].</td>
+    </tr>
+    <tr>
+      <td>String</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-getstring">getString</a></strong>(bool takeNewReadings =false)<br />The most important function for the user! Returns all data as a comma-separated string: “RH,T,”.</td>
+    </tr>
+    <tr>
+      <td>String</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-getheader">getHeader</a></strong>()<br />Return the header as an Arduino string: “Relative Humidity [%],Temp Atmos [C],”.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-sleep">sleep</a></strong>()<br />Dummy function to enable sleep mode.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="public-functions-documentation">Public Functions Documentation</h2>
+
+<h3 id="function-t9602">function T9602</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">T9602</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Instantiate the <a href="/T9602_Library/Classes/classT9602/">T9602</a> sensor class.</p>
+
+<h3 id="function-begin">function begin</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">begin</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">ADR_</span> <span class="o">=</span><span class="mh">0x28</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Begin communications with the <a href="/T9602_Library/Classes/classT9602/">T9602</a> sensor.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>ADR_</strong> I2C address. Defaults to 0x28. This library cannot change this, but this option exists in case you make this change elsewhere.</li>
+</ul>
+
+<p><strong>Return</strong>: <code class="language-plaintext highlighter-rouge">true</code> if the sensor acknowledges its address on the bus.</p>
+
+<h3 id="function-updatemeasurements">function updateMeasurements</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateMeasurements</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Measure relative humidity [%] and temperature [degrees C].</p>
+
+<p><strong>Return</strong>: <code class="language-plaintext highlighter-rouge">true</code> if a valid measurement was read. <code class="language-plaintext highlighter-rouge">false</code> on timeout (stale or no data, sensor in command mode, or no sensor): the stored values are then -9999.</p>
+
+<p>Sends a measurement request, then fetches data until the sensor’s status bits report a valid (not yet fetched) measurement, or until <code class="language-plaintext highlighter-rouge">T9602_TIMEOUT_MS</code> passes.</p>
+
+<h3 id="function-getstatus">function getStatus</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span> <span class="n">getStatus</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Status bits from the last data fetch.</p>
+
+<p><strong>Return</strong>: 0: valid data; 1: stale data (already fetched since the last measurement cycle); 2: sensor in command mode (start-up); 3: no data (no sensor on the bus).</p>
+
+<h3 id="function-gethumidity">function getHumidity</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getHumidity</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return the stored relative humidity [%].</p>
+
+<h3 id="function-gettemperature">function getTemperature</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getTemperature</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return the stored temperature [degrees C].</p>
+
+<h3 id="function-getstring">function getString</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">getString</span><span class="p">(</span>
+    <span class="kt">bool</span> <span class="n">takeNewReadings</span> <span class="o">=</span><span class="nb">false</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>The most important function for the user! Returns all data as a comma-separated string: “RH,T,”.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>takeNewReadings</strong> if <code class="language-plaintext highlighter-rouge">true</code> run <code class="language-plaintext highlighter-rouge">updateMeasurements</code> before returning values. Otherwise, just return values.</li>
+</ul>
+
+<p>This string is: “RELATIVE_HUMIDITY,TEMPERATURE,”. It is written with the code: return String(RH) + “,” + String(Temp) + “,”</p>
+
+<h3 id="function-getheader">function getHeader</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">getHeader</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return the header as an Arduino string: “Relative Humidity [%],Temp Atmos [C],”.</p>
+
+<h3 id="function-sleep">function sleep</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">sleep</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Dummy function to enable sleep mode.</p>
+
+<p>Currently not used. Instead, we simply power the sensor down.</p>
+
+<hr />
+
+<p>Updated on 2026-09-22 at 23:09:53 +0000</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+
+  
+
+
+        
+
+
+
+      </footer>
+
+      
+
+      
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/T9602_Library/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://docs.northernwidget.com">T9602 Library</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/T9602_Library/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

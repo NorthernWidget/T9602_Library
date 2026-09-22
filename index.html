@@ -1,0 +1,499 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.1 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js" dir="ltr">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>T9602 Library</title>
+<meta name="description" content="Arduino library interface for the Telaire T9602 humidity and temperature sensor">
+
+
+  <meta name="author" content="Northern Widget">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="T9602 Library">
+<meta property="og:title" content="T9602 Library">
+<meta property="og:url" content="https://docs.northernwidget.com/T9602_Library/">
+
+
+  <meta property="og:description" content="Arduino library interface for the Telaire T9602 humidity and temperature sensor">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="https://docs.northernwidget.com/T9602_Library/">
+
+
+
+
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+    "name": null,
+    "url": "https://docs.northernwidget.com/T9602_Library/"
+}
+</script>
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/T9602_Library/feed.xml" type="application/atom+xml" rel="alternate" title="T9602 Library Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/T9602_Library/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/T9602_Library/">
+          T9602 Library
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/"
+                
+                
+              >Quick-Start Guide</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      
+      
+        <li>
+          
+            <a href="/T9602_Library/"><span class="nav__sub-title">Overview</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/T9602_Library/Classes/classT9602/"><span class="nav__sub-title">T9602 Class</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/T9602_Library/Classes/index_classes/"><span class="nav__sub-title">Classes</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/T9602_Library/Files/index_files/"><span class="nav__sub-title">Files</span></a>
+          
+
+          
+        </li>
+      
+    
+  </ul>
+</nav>
+
+    
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+        <p><a href="https://doi.org/10.5281/zenodo.6338378"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6338378.svg" alt="DOI" /></a></p>
+
+<h1 id="t9602_library">T9602_Library</h1>
+
+<p><strong><em>Arduino library interface for the <a href="https://www.amphenol-sensors.com/en/telaire/humidity/527-humidity-sensors/3224-t9602">Telaire T9602 humidity and temperature sensor</a></em></strong></p>
+
+<p><img src="https://f.hubspotusercontent40.net/hubfs/9035299/main-T9602-Mod-4.png" alt="T9602 from Telaire" /></p>
+
+<p><strong><em>T9602 sensor.</em></strong> <em>Image from Amphenol/Telaire (see link above).</em></p>
+
+<h2 id="library">Library</h2>
+
+<p><strong>Full API reference:</strong> https://docs.northernwidget.com/T9602_Library/ (Doxygen, built from <code class="language-plaintext highlighter-rouge">master</code> by GitHub Actions).</p>
+
+<h2 id="key-sensor-features">Key sensor features</h2>
+
+<ul>
+  <li>IP67 rated</li>
+  <li>-20 to 70 °C operating range</li>
+  <li>Accuracy
+    <ul>
+      <li>±2% RH, 0-95% RH</li>
+      <li>±0.5°C</li>
+    </ul>
+  </li>
+  <li>14 bit resolution</li>
+</ul>
+
+<p><a href="https://www.amphenol-sensors.com/en/component/edocman/304-telaire-t9602-humidity-temperature-sensor-datasheet/download?Itemid=8487%20%27">Data sheet</a> for the full T9602 series.</p>
+
+<p><a href="https://www.amphenol-sensors.com/en/component/edocman/397-telaire-chipcap2-humidity-and-temperature-sensor-application-guide/download?Itemid=8487%20%27">Application guide for the ChipCap® 2 Humidity and Temperature Sensor</a> (core unit within the T9602). Importantly, this includes a guide to the I2C bus. This library operates only using the default I2C address (0x28), so you will need to consult this and this library (and make a pull request, please!) if you want to allow for different addresses to be set/used.</p>
+
+<h2 id="sensor-options">Sensor options</h2>
+
+<p>Our two most commonly used sensors are:</p>
+<ul>
+  <li><a href="https://www.digikey.com/product-detail/en/amphenol-advanced-sensors/T9602-3-D/235-1563-ND/5027914">T9602-3-D</a>
+    <ul>
+      <li>I2C</li>
+      <li>3.3V</li>
+      <li>1.8 m cable</li>
+    </ul>
+  </li>
+  <li><a href="https://www.digikey.com/product-detail/en/amphenol-advanced-sensors/T9602-3-D-1/235-1377-ND/5027895">T9602-3-D-1</a>
+    <ul>
+      <li>I2C</li>
+      <li>3.3V</li>
+      <li>1.0 m cable</li>
+    </ul>
+  </li>
+</ul>
+
+<p>5V versions, as well as those with other communications protocols, <a href="https://www.digikey.com/products/en/sensors-transducers/humidity-moisture-sensors/529?k=t9602">are available as well</a>.</p>
+
+<h2 id="wiring">Wiring</h2>
+
+<p><strong><em>WARNING</em>: LAYOUT DIFFERS FROM OUR STANDARD CONVENTIONS</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Color</strong></th>
+      <th><strong>Connection</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Red</td>
+      <td>V+</td>
+    </tr>
+    <tr>
+      <td>Green</td>
+      <td>GND</td>
+    </tr>
+    <tr>
+      <td>White</td>
+      <td>SDA</td>
+    </tr>
+    <tr>
+      <td>Black</td>
+      <td>SCL</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>We typically snip off the connector at and wire the sensor directly into the screw terminals of our data logger (<a href="https://github.com/NorthernWidget-Skunkworks/Project-Resnik">Resnik</a> or <a href="https://github.com/NorthernWidget-Skunkworks/Project-Margay">Margay</a>) or into our <a href="https://github.com/NorthernWidget-Skunkworks/Project-Heptapod/">Heptapod</a> I2C expander. You may instead choose to find a mating plug; the wires feel a bit delicate, but in our experience hold up better than expected.</p>
+
+<p><img src="https://media.digikey.com/photos/Amphenol%20Photos/T9602%20SERIES.jpg" alt="T9602 Digi-Key image with connector" /></p>
+
+<p><strong><em>T9602 and connector.</em></strong> <em>Image from Digi-Key (see links above).</em></p>
+
+<h2 id="writing-a-program-to-connect-to-the-t9602">Writing a program to connect to the T9602</h2>
+
+<p>You should be able to use any standard Arduino device to connect to the T9602 and read its data.</p>
+
+<p><em>This code is untested. If you do test it, please confirm that it works and/or create a PR and/or an issue for it to be fixed.</em></p>
+
+<h3 id="very-simple-arduino-code">Very simple Arduino code</h3>
+
+<p>This code is intended for any generic Arduino system. It is not proven.</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Include the T9602 library</span>
+<span class="cp">#include</span> <span class="cpf">"T9602.h"</span><span class="cp">
+</span>
+<span class="c1">// Declare variables -- just as strings</span>
+<span class="n">String</span> <span class="n">header</span><span class="p">;</span>
+<span class="n">String</span> <span class="n">data</span><span class="p">;</span>
+
+<span class="c1">// Instantiate class</span>
+<span class="n">T9602</span> <span class="n">mySensor</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">(){</span>
+    <span class="c1">// Begin Serial connection to computer at 38400 baud</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">38400</span><span class="p">);</span>
+    <span class="c1">// Obtain the header just once</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">mySensor</span><span class="p">.</span><span class="n">getHeader</span><span class="p">();</span>
+    <span class="c1">// Print the header to the serial monitor</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">header</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">(){</span>
+    <span class="c1">// Take one reading every (10 + time to take reading) seconds</span>
+    <span class="c1">// and print it to the screen</span>
+    <span class="n">mySensor</span><span class="p">.</span><span class="n">updateMeasurements</span><span class="p">();</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">mySensor</span><span class="p">.</span><span class="n">getString</span><span class="p">();</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span> <span class="c1">// Wait 10 seconds before the next reading, inefficiently</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">updateMeasurements()</code> sends a measurement request and then fetches data until the sensor’s status bits report a valid, not-yet-fetched measurement. It returns <code class="language-plaintext highlighter-rouge">true</code> on success and <code class="language-plaintext highlighter-rouge">false</code> after <code class="language-plaintext highlighter-rouge">T9602_TIMEOUT_MS</code> (250 ms by default; define it before the include to change it) without valid data, in which case the stored values are -9999. <code class="language-plaintext highlighter-rouge">getStatus()</code> returns the last status bits: 0 valid, 1 stale (already fetched since the last measurement cycle), 2 command mode (the sensor is still starting up), 3 no data (no sensor answered). <code class="language-plaintext highlighter-rouge">getString(true)</code> takes a new reading before returning it.</p>
+
+<h3 id="northern-widget-margay-code">Northern Widget Margay code</h3>
+
+<p>The <a href="github.com/NorthernWidget-Skunkworks/Project-Margay">Margay data logger</a> is the lightweight and low-power open-source data-logging option from Northern Widget. It saves data to a local SD card and includes on-board status measurements and a low-drift real-time clock. We have written <a href="github.com/NorthernWidget-Skunkworks/Margay_Library">a library to interface with the Margay</a>, which can in turn be used to link the Margay with sensors.</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Include the T9602 library</span>
+<span class="cp">#include</span> <span class="cpf">"Margay.h"</span><span class="cp">
+#include</span> <span class="cpf">"T9602.h"</span><span class="cp">
+</span>
+<span class="c1">// Declare variables -- just as strings</span>
+<span class="n">String</span> <span class="n">header</span><span class="p">;</span>
+<span class="n">String</span> <span class="n">data</span><span class="p">;</span>
+
+<span class="c1">// Instantiate classes</span>
+<span class="n">T9602</span> <span class="n">mySensor</span><span class="p">;</span>
+<span class="n">Margay</span> <span class="nf">Logger</span><span class="p">(</span><span class="n">Model_2v0</span><span class="p">,</span> <span class="n">Build_B</span><span class="p">);</span> <span class="c1">// Margay v2.2; UPDATE CODE TO INDICATE THIS</span>
+
+<span class="c1">// Empty header to start; will include sensor labels and information</span>
+<span class="n">String</span> <span class="n">Header</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+
+<span class="c1">// I2C address for T9602</span>
+<span class="kt">uint8_t</span> <span class="n">I2CVals</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mh">0x28</span><span class="p">};</span>
+
+<span class="c1">//Number of seconds between readings</span>
+<span class="kt">uint32_t</span> <span class="n">updateRate</span> <span class="o">=</span> <span class="mi">60</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">(){</span>
+    <span class="n">Header</span> <span class="o">=</span> <span class="n">Header</span> <span class="o">+</span> <span class="n">mySensor</span><span class="p">.</span><span class="n">getHeader</span><span class="p">();</span>
+    <span class="n">Logger</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">I2CVals</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">I2CVals</span><span class="p">),</span> <span class="n">Header</span><span class="p">);</span>
+    <span class="n">initialize</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">(){</span>
+    <span class="n">initialize</span><span class="p">();</span>
+    <span class="n">Logger</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">updateRate</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">String</span> <span class="nf">update</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">initialize</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">mySensor</span><span class="p">.</span><span class="n">getString</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">initialize</span><span class="p">(){</span>
+    <span class="n">mySensor</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="testing">Testing</h2>
+
+<p><code class="language-plaintext highlighter-rouge">extras/test/run.sh</code> compiles the library on a desktop against stub <code class="language-plaintext highlighter-rouge">Arduino.h</code> and <code class="language-plaintext highlighter-rouge">Wire.h</code> that emulate the ChipCap 2 status bits, and checks that the output for fixed sensor behaviour is byte-identical to <code class="language-plaintext highlighter-rouge">extras/test/baseline.txt</code>. Run it after any change; <code class="language-plaintext highlighter-rouge">--record</code> rewrites the baseline when an output change is intended.</p>
+
+<h2 id="acknowledgments">Acknowledgments</h2>
+
+<p>Support for this project provided by:</p>
+
+<p><img src="https://pbs.twimg.com/profile_images/1445421246045360133/zQtKhpkT_400x400.jpg" alt="UMN ESCI" width="240px" /></p>
+
+<p><img src="https://www.nsf.gov/news/mmg/media/images/nsf_logo_f_ba321daf-8607-41d7-94bc-1db6039d7893.jpg" alt="NSF" width="240px" /></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+
+  
+
+
+        
+
+
+
+      </footer>
+
+      
+
+      
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/T9602_Library/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://docs.northernwidget.com">T9602 Library</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/T9602_Library/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
