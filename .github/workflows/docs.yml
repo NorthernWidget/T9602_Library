@@ -4,6 +4,12 @@ on:
   push:
     branches: [master]
 
+# The shared workflow pushes the built site, so it needs write access to the
+# repository; a called workflow cannot get more than its caller grants, and
+# the repository's default may be read-only (Liasis's was: startup failure).
+permissions:
+  contents: write
+
 jobs:
   docs:
     uses: NorthernWidget/.github/.github/workflows/deploy-docs.yml@main
