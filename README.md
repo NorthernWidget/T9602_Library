@@ -96,7 +96,9 @@ void loop(){
 }
 ```
 
-`updateMeasurements()` sends a measurement request and then fetches data until the sensor's status bits report a valid, not-yet-fetched measurement. It returns `true` on success and `false` after `T9602_TIMEOUT_MS` (250 ms by default; define it before the include to change it) without valid data, in which case the stored values are -9999. `getStatus()` returns the last status bits: 0 valid, 1 stale (already fetched since the last measurement cycle), 2 command mode (the sensor is still starting up), 3 no data (no sensor answered). `getString(true)` takes a new reading before returning it.
+`updateMeasurements()` sends a measurement request and then fetches data until the sensor's status bits report a valid, not-yet-fetched measurement. It returns `true` on success and `false` after `T9602_TIMEOUT_MS` (250 ms by default; define it before the include to change it) without valid data, in which case the stored values are NW_ERROR (-9999). `getStatus()` returns the last status bits: 0 valid, 1 stale (already fetched since the last measurement cycle), 2 command mode (the sensor is still starting up), 3 no data (no sensor answered). `getString(true)` takes a new reading before returning it.
+
+`setReadings(n)` sets how many readings `updateMeasurements()` takes (each is its own measurement cycle, so they are independent; clamped to `T9602_CAPACITY`, default 16, override before the include); the getters then return the means, and `getHumidityMean()`, `getHumidityStd()`, `getHumiditySterr()`, `getHumidityMedian()`, the same for temperature, and `getReadingCount()` read the stored readings. With `setStats(true)` the std and sterr columns join `getHeader()` and `getString()`. For one row per reading to a file, `beginReadings(n)`, `printHeader(out)`, `logReading(out)` n times, `endReadings()`, to any `Print` (an SdFat `File`, `Serial`). Requires the [NW_Core](https://github.com/NorthernWidget/NW_Core) library.
 
 ### Northern Widget Margay code
 

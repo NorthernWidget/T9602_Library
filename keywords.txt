@@ -19,6 +19,22 @@ getTemperature	KEYWORD2
 getStatus	KEYWORD2
 getString	KEYWORD2
 getHeader	KEYWORD2
+endReadings	KEYWORD2
+beginReadings	KEYWORD2
+logReading	KEYWORD2
+printReading	KEYWORD2
+printHeader	KEYWORD2
+getTemperatureMedian	KEYWORD2
+getTemperatureSterr	KEYWORD2
+getTemperatureStd	KEYWORD2
+getTemperatureMean	KEYWORD2
+getHumidityMedian	KEYWORD2
+getHumiditySterr	KEYWORD2
+getHumidityStd	KEYWORD2
+getHumidityMean	KEYWORD2
+getReadingCount	KEYWORD2
+setStats	KEYWORD2
+setReadings	KEYWORD2
 sleep	KEYWORD2
 
 #######################################
@@ -26,3 +42,4 @@ sleep	KEYWORD2
 #######################################
 
 T9602_TIMEOUT_MS	LITERAL1
+T9602_CAPACITY	LITERAL1
