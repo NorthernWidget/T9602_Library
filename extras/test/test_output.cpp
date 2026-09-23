@@ -9,11 +9,41 @@ TwoWire Wire;
 static uint16_t rhRaw(float pct) { return (uint16_t)(pct / 100.0f * 16384.0f + 0.5f); }
 static uint16_t tRaw(float degC) { return (uint16_t)((degC + 40.0f) / 165.0f * 16384.0f + 0.5f); }
 
+// The ChipCap 2 core emulated on NW_Core's register-image stub: the sensor runs
+// its own measurement cycle (Update mode), the status bits in the first byte say
+// valid (00), stale (01, already fetched since the last cycle) or command mode
+// (10, start-up); the four bytes are rebuilt before every read (beforeRead).
+struct ChipCap {
+    uint32_t cycleMs = 100;            // Update-mode period (0.70-165 ms per the guide)
+    uint32_t readyAt = 0;              // millis() at which the first valid cycle completes (start-up)
+    uint32_t lastCycle = 0;            // millis() of the last completed cycle
+    bool fetched = false;              // current data already fetched -> stale
+    bool cycled = true;                // false until the first measurement cycle completes
+    uint16_t rh14 = 0, t14 = 0;        // current measurement (raw 14-bit)
+    uint16_t nextRh14 = 0, nextT14 = 0; // what the next cycle will produce
+} chip;
+static void installChipCap() {
+    Wire.beforeRead = [](TwoWire& w, uint8_t) {
+        uint8_t status;
+        if (millis() < chip.readyAt) { status = 0x2; }                        // command mode: no data yet
+        else {
+            if (!chip.cycled || millis() - chip.lastCycle >= chip.cycleMs) { // a cycle completed since the last one
+                chip.lastCycle = millis() - (millis() - chip.readyAt) % chip.cycleMs; chip.cycled = true;
+                chip.rh14 = chip.nextRh14; chip.t14 = chip.nextT14; chip.fetched = false;
+            }
+            status = chip.fetched ? 0x1 : 0x0; chip.fetched = true;
+        }
+        w.image[0] = (uint8_t)((status << 6) | ((chip.rh14 >> 8) & 0x3F)); w.image[1] = (uint8_t)(chip.rh14 & 0xFF);
+        w.image[2] = (uint8_t)(chip.t14 >> 6);                               w.image[3] = (uint8_t)((chip.t14 & 0x3F) << 2);
+    };
+}
+
 // Sensor already measured (rh0, t0) and that data was fetched; the next cycle yields (rh1, t1).
 static void sensor(float rh0, float t0, float rh1, float t1, uint32_t cycleMs, uint32_t readyAt, bool fetched) {
-    Wire = TwoWire();
-    Wire.rh14 = rhRaw(rh0); Wire.t14 = tRaw(t0); Wire.nextRh14 = rhRaw(rh1); Wire.nextT14 = tRaw(t1);
-    Wire.cycleMs = cycleMs; Wire.readyAt = readyAt; Wire.lastCycle = readyAt; Wire.fetched = fetched; Wire.cycled = (readyAt == 0);
+    Wire = TwoWire(); Wire.deviceAddress = 0x28; Wire.autoIncrement = false; installChipCap();
+    chip = ChipCap();
+    chip.rh14 = rhRaw(rh0); chip.t14 = tRaw(t0); chip.nextRh14 = rhRaw(rh1); chip.nextT14 = tRaw(t1);
+    chip.cycleMs = cycleMs; chip.readyAt = readyAt; chip.lastCycle = readyAt; chip.fetched = fetched; chip.cycled = (readyAt == 0);
     _millis_counter() = 0;
 }
 
@@ -25,12 +55,12 @@ static void report(const char* name, T9602& s) {
 }
 
 int main() {
-    T9602 s;
+    T9602 s; Wire.deviceAddress = 0x28; Wire.autoIncrement = false;
     printf("begin: %d\n", s.begin());
     printf("header: %s\n", s.getHeader().c_str());
 
     // 1. Fresh data waiting: status 00 on the first fetch.
-    sensor(40.0f, 20.0f, 50.0f, 25.0f, 100, 0, false); Wire.rh14 = rhRaw(50.0f); Wire.t14 = tRaw(25.0f);
+    sensor(40.0f, 20.0f, 50.0f, 25.0f, 100, 0, false); chip.rh14 = rhRaw(50.0f); chip.t14 = tRaw(25.0f);
     report("valid on first fetch", s);
 
     // 2. Called again before a new cycle: first fetch is stale (01) and repeats 50/25; the next cycle (at 100 ms) gives 60/30.
