@@ -39,6 +39,7 @@ static void installChipCap() {
         uint8_t f[4] = { (uint8_t)((status << 6) | ((chip.rh14 >> 8) & 0x3F)), (uint8_t)(chip.rh14 & 0xFF),
                          (uint8_t)(chip.t14 >> 6), (uint8_t)((chip.t14 & 0x3F) << 2) };
         for (uint8_t i = 0; i < n && i < 4; i++) out.push_back(f[i]);   // the same four bytes on every fetch: no register pointer
+        return true;
     };
 }
 
