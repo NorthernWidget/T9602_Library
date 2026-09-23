@@ -225,7 +225,7 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#classes">Classes</a></li><li><a href="#defines">Defines</a></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-t9602_timeout_ms">define T9602_TIMEOUT_MS</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
+              <ul class="toc__menu"><li><a href="#classes">Classes</a></li><li><a href="#defines">Defines</a></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-t9602_capacity">define T9602_CAPACITY</a></li><li><a href="#define-t9602_timeout_ms">define T9602_TIMEOUT_MS</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
             </nav>
           </aside>
         
@@ -258,12 +258,23 @@
   <tbody>
     <tr>
       <td> </td>
+      <td><strong><a href="/T9602_Library/Files/T9602_8h/#define-t9602-capacity">T9602_CAPACITY</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
       <td><strong><a href="/T9602_Library/Files/T9602_8h/#define-t9602-timeout-ms">T9602_TIMEOUT_MS</a></strong></td>
     </tr>
   </tbody>
 </table>
 
 <h2 id="macros-documentation">Macros Documentation</h2>
+
+<h3 id="define-t9602_capacity">define T9602_CAPACITY</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define T9602_CAPACITY 16
+</span></code></pre></div></div>
+
+<p>Readings per updateMeasurements() are kept in static arrays of this capacity (no heap); setReadings(n) clamps to it. Override before the include to trade RAM for a longer batch.</p>
 
 <h3 id="define-t9602_timeout_ms">define T9602_TIMEOUT_MS</h3>
 
@@ -279,6 +290,11 @@
 </span>
 <span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
 #include</span> <span class="cpf">"Wire.h"</span><span class="cp">
+#include</span> <span class="cpf">&lt;NW_Core.h&gt;</span><span class="c1">   //NW_Core: NW_Readings (statistics), NW_ReadingsConfig, NW_ERROR</span><span class="cp">
+</span>
+<span class="cp">#ifndef T9602_CAPACITY
+#define T9602_CAPACITY 16
+#endif
 </span>
 <span class="cp">#ifndef T9602_TIMEOUT_MS
 #define T9602_TIMEOUT_MS 250
@@ -292,10 +308,25 @@
         <span class="kt">bool</span> <span class="n">begin</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">ADR_</span> <span class="o">=</span> <span class="mh">0x28</span><span class="p">);</span> <span class="c1">//use default address</span>
 
     <span class="kt">bool</span> <span class="n">updateMeasurements</span><span class="p">();</span>
+    <span class="kt">uint16_t</span> <span class="n">setReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="n">setStats</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enable</span><span class="p">);</span>
+    <span class="kt">uint16_t</span> <span class="n">getReadingCount</span><span class="p">();</span>
 
     <span class="kt">uint8_t</span> <span class="n">getStatus</span><span class="p">();</span>
 
         <span class="kt">float</span> <span class="n">getHumidity</span><span class="p">();</span>
+
+    <span class="c1">//--- Statistics getters ---</span>
+    <span class="c1">//Computed two-pass in 32-bit float over the readings stored by the last</span>
+    <span class="c1">//updateMeasurements() (NW_Readings). NW_ERROR when there are none.</span>
+    <span class="kt">float</span> <span class="n">getHumidityMean</span><span class="p">();</span>
+    <span class="kt">float</span> <span class="n">getHumidityStd</span><span class="p">();</span>
+    <span class="kt">float</span> <span class="n">getHumiditySterr</span><span class="p">();</span>
+    <span class="kt">float</span> <span class="n">getHumidityMedian</span><span class="p">();</span>
+    <span class="kt">float</span> <span class="n">getTemperatureMean</span><span class="p">();</span>
+    <span class="kt">float</span> <span class="n">getTemperatureStd</span><span class="p">();</span>
+    <span class="kt">float</span> <span class="n">getTemperatureSterr</span><span class="p">();</span>
+    <span class="kt">float</span> <span class="n">getTemperatureMedian</span><span class="p">();</span>
 
         <span class="kt">float</span> <span class="n">getTemperature</span><span class="p">();</span>
 
@@ -305,11 +336,22 @@
 
         <span class="kt">bool</span> <span class="n">sleep</span><span class="p">();</span>
 
+    <span class="c1">//--- Reading interface (NW standard) ---</span>
+    <span class="kt">size_t</span> <span class="n">printHeader</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">);</span>
+    <span class="kt">size_t</span> <span class="n">printReading</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">);</span>
+    <span class="kt">size_t</span> <span class="n">logReading</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="n">beginReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="n">endReadings</span><span class="p">();</span>
+
     <span class="nl">private:</span>
         <span class="kt">uint8_t</span> <span class="n">ADR</span> <span class="o">=</span> <span class="mh">0x28</span><span class="p">;</span> <span class="c1">//Default global sensor address</span>
         <span class="kt">uint8_t</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//Status bits from the last data fetch</span>
-        <span class="kt">float</span> <span class="n">RH</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span><span class="p">;</span>
-        <span class="kt">float</span> <span class="n">Temp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">RH</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span> <span class="c1">//Mean of the last updateMeasurements()</span>
+        <span class="kt">float</span> <span class="n">Temp</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">readOnce</span><span class="p">();</span> <span class="c1">//One measurement cycle, appended to the readings</span>
+        <span class="n">NW_Readings</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="n">T9602_CAPACITY</span><span class="o">&gt;</span> <span class="n">_rh</span><span class="p">;</span> <span class="c1">//[%]</span>
+        <span class="n">NW_Readings</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="n">T9602_CAPACITY</span><span class="o">&gt;</span> <span class="n">_temp</span><span class="p">;</span> <span class="c1">//[C]</span>
+        <span class="n">NW_ReadingsConfig</span> <span class="n">_cfg</span><span class="p">;</span> <span class="c1">//Readings per updateMeasurements() and the stats columns</span>
 <span class="p">};</span>
 
 <span class="cp">#endif
@@ -317,7 +359,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-22 at 23:09:53 +0000</p>
+<p>Updated on 2026-09-23 at 16:11:12 +0000</p>
 
         
       </section>

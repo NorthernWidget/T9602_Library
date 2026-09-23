@@ -246,6 +246,29 @@
 <span class="p">}</span>
 
 <span class="kt">bool</span> <span class="n">T9602</span><span class="o">::</span><span class="n">updateMeasurements</span><span class="p">(){</span>
+    <span class="c1">//N independent measurement cycles, then the means; NW_ERROR when none was valid.</span>
+    <span class="n">_rh</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+    <span class="n">_temp</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_cfg</span><span class="p">.</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">readOnce</span><span class="p">();</span>
+    <span class="n">RH</span> <span class="o">=</span> <span class="n">_rh</span><span class="p">.</span><span class="n">mean</span><span class="p">();</span> <span class="c1">//NW_ERROR when empty</span>
+    <span class="n">Temp</span> <span class="o">=</span> <span class="n">_temp</span><span class="p">.</span><span class="n">mean</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">_cfg</span><span class="p">.</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">_rh</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="n">_cfg</span><span class="p">.</span><span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">uint16_t</span> <span class="n">T9602</span><span class="o">::</span><span class="n">setReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_cfg</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">T9602_CAPACITY</span><span class="p">);</span> <span class="p">}</span>
+<span class="kt">void</span>     <span class="n">T9602</span><span class="o">::</span><span class="n">setStats</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enable</span><span class="p">)</span>   <span class="p">{</span> <span class="n">_cfg</span><span class="p">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">enable</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">uint16_t</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getReadingCount</span><span class="p">()</span>       <span class="p">{</span> <span class="k">return</span> <span class="n">_rh</span><span class="p">.</span><span class="n">count</span><span class="p">();</span> <span class="p">}</span>
+
+<span class="kt">float</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getHumidityMean</span><span class="p">()</span>      <span class="p">{</span> <span class="k">return</span> <span class="n">_rh</span><span class="p">.</span><span class="n">mean</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getHumidityStd</span><span class="p">()</span>       <span class="p">{</span> <span class="k">return</span> <span class="n">_rh</span><span class="p">.</span><span class="n">std</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getHumiditySterr</span><span class="p">()</span>     <span class="p">{</span> <span class="k">return</span> <span class="n">_rh</span><span class="p">.</span><span class="n">sterr</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getHumidityMedian</span><span class="p">()</span>    <span class="p">{</span> <span class="k">return</span> <span class="n">_rh</span><span class="p">.</span><span class="n">median</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getTemperatureMean</span><span class="p">()</span>   <span class="p">{</span> <span class="k">return</span> <span class="n">_temp</span><span class="p">.</span><span class="n">mean</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getTemperatureStd</span><span class="p">()</span>    <span class="p">{</span> <span class="k">return</span> <span class="n">_temp</span><span class="p">.</span><span class="n">std</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getTemperatureSterr</span><span class="p">()</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">_temp</span><span class="p">.</span><span class="n">sterr</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getTemperatureMedian</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_temp</span><span class="p">.</span><span class="n">median</span><span class="p">();</span> <span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">T9602</span><span class="o">::</span><span class="n">readOnce</span><span class="p">(){</span>
 
     <span class="kt">uint8_t</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span> <span class="c1">//Array for raw data from device</span>
 
@@ -268,17 +291,16 @@
         <span class="n">status</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="n">T9602_TIMEOUT_MS</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">RH</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span><span class="p">;</span>
-            <span class="n">Temp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span><span class="p">;</span>
+            <span class="c1">//No valid reading this cycle: nothing is appended</span>
             <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="c1">// Convert RH to percent</span>
-    <span class="n">RH</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)((((</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x3F</span> <span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">16384.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">;</span> 
+    <span class="n">_rh</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="kt">float</span><span class="p">)((((</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x3F</span> <span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">16384.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span> 
     <span class="c1">// Convert Temp</span>
-    <span class="n">Temp</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)((</span><span class="kt">unsigned</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">64</span><span class="p">))</span> <span class="o">+</span> <span class="kt">unsigned</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span> <span class="p">)))</span> <span class="o">/</span> <span class="mf">16384.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">165.0</span> <span class="o">-</span> <span class="mf">40.0</span><span class="p">;</span>  
+    <span class="n">_temp</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="kt">float</span><span class="p">)((</span><span class="kt">unsigned</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">64</span><span class="p">))</span> <span class="o">+</span> <span class="kt">unsigned</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span> <span class="p">)))</span> <span class="o">/</span> <span class="mf">16384.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">165.0</span> <span class="o">-</span> <span class="mf">40.0</span><span class="p">);</span>  
     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -299,13 +321,54 @@
 
 <span class="n">String</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getHeader</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="k">return</span> <span class="s">"Humidity [%],Temp Atmos [C],"</span><span class="p">;</span>
+    <span class="n">String</span> <span class="n">h</span> <span class="o">=</span> <span class="s">"Humidity [%],"</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">_cfg</span><span class="p">.</span><span class="n">columns</span><span class="p">())</span> <span class="n">h</span> <span class="o">+=</span> <span class="s">"Humidity std [%],Humidity sterr [%],"</span><span class="p">;</span>
+    <span class="n">h</span> <span class="o">+=</span> <span class="s">"Temp Atmos [C],"</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">_cfg</span><span class="p">.</span><span class="n">columns</span><span class="p">())</span> <span class="n">h</span> <span class="o">+=</span> <span class="s">"Temp Atmos std [C],Temp Atmos sterr [C],"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">h</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="n">String</span> <span class="n">T9602</span><span class="o">::</span><span class="n">getString</span><span class="p">(</span><span class="kt">bool</span> <span class="n">takeNewReadings</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">if</span><span class="p">(</span><span class="n">takeNewReadings</span><span class="p">)</span> <span class="n">updateMeasurements</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">String</span><span class="p">(</span><span class="n">RH</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">Temp</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="n">RH</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">_cfg</span><span class="p">.</span><span class="n">columns</span><span class="p">())</span> <span class="n">s</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">getHumidityStd</span><span class="p">())</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">getHumiditySterr</span><span class="p">())</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">Temp</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">_cfg</span><span class="p">.</span><span class="n">columns</span><span class="p">())</span> <span class="n">s</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">getTemperatureStd</span><span class="p">())</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">getTemperatureSterr</span><span class="p">())</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//The reading interface: one reading per logReading(), printed as it is taken.</span>
+<span class="kt">void</span> <span class="n">T9602</span><span class="o">::</span><span class="n">beginReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">n</span><span class="p">;</span> <span class="c1">//Not a Schema 1 device: nothing to declare to the sensor</span>
+    <span class="n">_rh</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+    <span class="n">_temp</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">T9602</span><span class="o">::</span><span class="n">endReadings</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//No cleanup required currently</span>
+<span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">T9602</span><span class="o">::</span><span class="n">printHeader</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Humidity [%],Temp Atmos [C],"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">T9602</span><span class="o">::</span><span class="n">printReading</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">RH</span><span class="p">);</span>   <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Temp</span><span class="p">);</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">T9602</span><span class="o">::</span><span class="n">logReading</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">readOnce</span><span class="p">())</span> <span class="p">{</span> <span class="n">RH</span> <span class="o">=</span> <span class="n">_rh</span><span class="p">.</span><span class="n">last</span><span class="p">();</span> <span class="n">Temp</span> <span class="o">=</span> <span class="n">_temp</span><span class="p">.</span><span class="n">last</span><span class="p">();</span> <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span> <span class="n">RH</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span> <span class="n">Temp</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="nf">printReading</span><span class="p">(</span><span class="n">out</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">bool</span> <span class="n">T9602</span><span class="o">::</span><span class="n">sleep</span><span class="p">()</span>
@@ -317,7 +380,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-22 at 23:09:53 +0000</p>
+<p>Updated on 2026-09-23 at 16:11:12 +0000</p>
 
         
       </section>

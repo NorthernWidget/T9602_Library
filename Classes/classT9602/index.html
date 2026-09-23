@@ -225,7 +225,7 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-t9602">function T9602</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-getstatus">function getStatus</a></li><li><a href="#function-gethumidity">function getHumidity</a></li><li><a href="#function-gettemperature">function getTemperature</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-sleep">function sleep</a></li></ul></li></ul>
+              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-t9602">function T9602</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-setreadings">function setReadings</a></li><li><a href="#function-setstats">function setStats</a></li><li><a href="#function-getreadingcount">function getReadingCount</a></li><li><a href="#function-getstatus">function getStatus</a></li><li><a href="#function-gethumidity">function getHumidity</a></li><li><a href="#function-gethumiditymean">function getHumidityMean</a></li><li><a href="#function-gethumiditystd">function getHumidityStd</a></li><li><a href="#function-gethumiditysterr">function getHumiditySterr</a></li><li><a href="#function-gethumiditymedian">function getHumidityMedian</a></li><li><a href="#function-gettemperaturemean">function getTemperatureMean</a></li><li><a href="#function-gettemperaturestd">function getTemperatureStd</a></li><li><a href="#function-gettemperaturesterr">function getTemperatureSterr</a></li><li><a href="#function-gettemperaturemedian">function getTemperatureMedian</a></li><li><a href="#function-gettemperature">function getTemperature</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-sleep">function sleep</a></li><li><a href="#function-printheader">function printHeader</a></li><li><a href="#function-printreading">function printReading</a></li><li><a href="#function-logreading">function logReading</a></li><li><a href="#function-beginreadings">function beginReadings</a></li><li><a href="#function-endreadings">function endReadings</a></li></ul></li></ul>
             </nav>
           </aside>
         
@@ -256,12 +256,56 @@
       <td><strong><a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements</a></strong>()<br />Measure relative humidity [%] and temperature [degrees C].</td>
     </tr>
     <tr>
+      <td>uint16_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-setreadings">setReadings</a></strong>(uint16_t n)<br />Set how many readings <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a> takes (statistics are computed over them). Clamped to T9602_CAPACITY.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-setstats">setStats</a></strong>(bool enable)<br />Enable or disable humidity and temperature std and sterr columns in <a href="">getString()</a>/getHeader().</td>
+    </tr>
+    <tr>
+      <td>uint16_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-getreadingcount">getReadingCount</a></strong>()<br />Number of valid readings stored by the last <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a>.</td>
+    </tr>
+    <tr>
       <td>uint8_t</td>
       <td><strong><a href="/T9602_Library/Classes/classT9602/#function-getstatus">getStatus</a></strong>()<br />Status bits from the last data fetch.</td>
     </tr>
     <tr>
       <td>float</td>
-      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gethumidity">getHumidity</a></strong>()<br />Return the stored relative humidity [%].</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gethumidity">getHumidity</a></strong>()<br />Return the stored relative humidity [%]: the mean of the last <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a>, NW_ERROR (-9999) when none was valid.</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gethumiditymean">getHumidityMean</a></strong>()<br />Humidity mean [%] over the stored readings.</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gethumiditystd">getHumidityStd</a></strong>()<br />Humidity standard deviation [%].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gethumiditysterr">getHumiditySterr</a></strong>()<br />Humidity standard error [%].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gethumiditymedian">getHumidityMedian</a></strong>()<br />Humidity median [%] (mean of the middle pair for even N).</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gettemperaturemean">getTemperatureMean</a></strong>()<br />Temperature mean [C] over the stored readings.</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gettemperaturestd">getTemperatureStd</a></strong>()<br />Temperature standard deviation [C].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gettemperaturesterr">getTemperatureSterr</a></strong>()<br />Temperature standard error [C].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gettemperaturemedian">getTemperatureMedian</a></strong>()<br />Temperature median [C].</td>
     </tr>
     <tr>
       <td>float</td>
@@ -278,6 +322,26 @@
     <tr>
       <td>bool</td>
       <td><strong><a href="/T9602_Library/Classes/classT9602/#function-sleep">sleep</a></strong>()<br />Dummy function to enable sleep mode.</td>
+    </tr>
+    <tr>
+      <td>size_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-printheader">printHeader</a></strong>(Print &amp; out)<br />Print the header matching <a href="">printReading()</a>: “Humidity [%],Temp Atmos [C],”. No statistics columns: one reading has none.</td>
+    </tr>
+    <tr>
+      <td>size_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-printreading">printReading</a></strong>(Print &amp; out)<br />Print the stored reading, each value followed by a comma. Does not acquire: call <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a> first, or use <a href="">logReading()</a>.</td>
+    </tr>
+    <tr>
+      <td>size_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-logreading">logReading</a></strong>(Print &amp; out)<br />Take ONE reading and print it: the one-reading primitive for collecting many readings to a file.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-beginreadings">beginReadings</a></strong>(uint16_t n =0)<br />Begin a run of readings. The <a href="/T9602_Library/Classes/classT9602/">T9602</a> is not a Schema 1 device, so n is only the number of <a href="/T9602_Library/Classes/classT9602/#function-logreading">logReading()</a> calls to follow; nothing is declared to the sensor.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-endreadings">endReadings</a></strong>()<br />End a run of readings.</td>
     </tr>
   </tbody>
 </table>
@@ -315,9 +379,36 @@
 
 <p>Measure relative humidity [%] and temperature [degrees C].</p>
 
-<p><strong>Return</strong>: <code class="language-plaintext highlighter-rouge">true</code> if a valid measurement was read. <code class="language-plaintext highlighter-rouge">false</code> on timeout (stale or no data, sensor in command mode, or no sensor): the stored values are then -9999.</p>
+<p><strong>Return</strong>: <code class="language-plaintext highlighter-rouge">true</code> if every reading was valid. <code class="language-plaintext highlighter-rouge">false</code> if any timed out (stale or no data, sensor in command mode, or no sensor); the stored values are NW_ERROR (-9999) when none was valid.</p>
 
-<p>Sends a measurement request, then fetches data until the sensor’s status bits report a valid (not yet fetched) measurement, or until <code class="language-plaintext highlighter-rouge">T9602_TIMEOUT_MS</code> passes.</p>
+<p>Takes setReadings(n) readings (default one). Each sends a measurement request, then fetches data until the sensor’s status bits report a valid (not yet fetched) measurement, or until <code class="language-plaintext highlighter-rouge">T9602_TIMEOUT_MS</code> passes; readings are therefore independent measurement cycles. The getters return the mean of the readings taken.</p>
+
+<h3 id="function-setreadings">function setReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint16_t</span> <span class="n">setReadings</span><span class="p">(</span>
+    <span class="kt">uint16_t</span> <span class="n">n</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Set how many readings <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a> takes (statistics are computed over them). Clamped to T9602_CAPACITY.</p>
+
+<p><strong>Return</strong>: The number actually set.</p>
+
+<h3 id="function-setstats">function setStats</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setStats</span><span class="p">(</span>
+    <span class="kt">bool</span> <span class="n">enable</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Enable or disable humidity and temperature std and sterr columns in <a href="">getString()</a>/getHeader().</p>
+
+<h3 id="function-getreadingcount">function getReadingCount</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint16_t</span> <span class="n">getReadingCount</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Number of valid readings stored by the last <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a>.</p>
 
 <h3 id="function-getstatus">function getStatus</h3>
 
@@ -333,7 +424,63 @@
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getHumidity</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>Return the stored relative humidity [%].</p>
+<p>Return the stored relative humidity [%]: the mean of the last <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a>, NW_ERROR (-9999) when none was valid.</p>
+
+<h3 id="function-gethumiditymean">function getHumidityMean</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getHumidityMean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Humidity mean [%] over the stored readings.</p>
+
+<h3 id="function-gethumiditystd">function getHumidityStd</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getHumidityStd</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Humidity standard deviation [%].</p>
+
+<h3 id="function-gethumiditysterr">function getHumiditySterr</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getHumiditySterr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Humidity standard error [%].</p>
+
+<h3 id="function-gethumiditymedian">function getHumidityMedian</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getHumidityMedian</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Humidity median [%] (mean of the middle pair for even N).</p>
+
+<h3 id="function-gettemperaturemean">function getTemperatureMean</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getTemperatureMean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Temperature mean [C] over the stored readings.</p>
+
+<h3 id="function-gettemperaturestd">function getTemperatureStd</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getTemperatureStd</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Temperature standard deviation [C].</p>
+
+<h3 id="function-gettemperaturesterr">function getTemperatureSterr</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getTemperatureSterr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Temperature standard error [C].</p>
+
+<h3 id="function-gettemperaturemedian">function getTemperatureMedian</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getTemperatureMedian</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Temperature median [C].</p>
 
 <h3 id="function-gettemperature">function getTemperature</h3>
 
@@ -375,9 +522,64 @@
 
 <p>Currently not used. Instead, we simply power the sensor down.</p>
 
+<h3 id="function-printheader">function printHeader</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">printHeader</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Print the header matching <a href="">printReading()</a>: “Humidity [%],Temp Atmos [C],”. No statistics columns: one reading has none.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>out</strong> Any Print destination (SdFat File, Serial, …).</li>
+</ul>
+
+<p><strong>Return</strong>: Bytes written.</p>
+
+<h3 id="function-printreading">function printReading</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">printReading</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Print the stored reading, each value followed by a comma. Does not acquire: call <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a> first, or use <a href="">logReading()</a>.</p>
+
+<p><strong>Return</strong>: Bytes written.</p>
+
+<h3 id="function-logreading">function logReading</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">logReading</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Take ONE reading and print it: the one-reading primitive for collecting many readings to a file.</p>
+
+<p><strong>Return</strong>: Bytes written.</p>
+
+<h3 id="function-beginreadings">function beginReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">beginReadings</span><span class="p">(</span>
+    <span class="kt">uint16_t</span> <span class="n">n</span> <span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Begin a run of readings. The <a href="/T9602_Library/Classes/classT9602/">T9602</a> is not a Schema 1 device, so n is only the number of <a href="/T9602_Library/Classes/classT9602/#function-logreading">logReading()</a> calls to follow; nothing is declared to the sensor.</p>
+
+<h3 id="function-endreadings">function endReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">endReadings</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>End a run of readings.</p>
+
 <hr />
 
-<p>Updated on 2026-09-22 at 23:09:53 +0000</p>
+<p>Updated on 2026-09-23 at 16:11:12 +0000</p>
 
         
       </section>
