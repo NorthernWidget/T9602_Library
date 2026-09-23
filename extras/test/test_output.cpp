@@ -5,6 +5,7 @@
 #include "Wire.h"
 TwoWire Wire;
 #include "../../src/T9602.cpp"
+#include "NW_TestSupport.h"   // BufferPrint (the Schema 1 helpers there are unused: the T9602 is not an NW device)
 
 static uint16_t rhRaw(float pct) { return (uint16_t)(pct / 100.0f * 16384.0f + 0.5f); }
 static uint16_t tRaw(float degC) { return (uint16_t)((degC + 40.0f) / 165.0f * 16384.0f + 0.5f); }
@@ -21,6 +22,7 @@ struct ChipCap {
     bool cycled = true;                // false until the first measurement cycle completes
     uint16_t rh14 = 0, t14 = 0;        // current measurement (raw 14-bit)
     uint16_t nextRh14 = 0, nextT14 = 0; // what the next cycle will produce
+    int16_t rhStep = 0, tStep = 0;      // added to the next values after every cycle (varying readings)
 } chip;
 static void installChipCap() {
     Wire.onRequest = [](TwoWire&, uint8_t n, std::deque<uint8_t>& out) {
@@ -30,6 +32,7 @@ static void installChipCap() {
             if (!chip.cycled || millis() - chip.lastCycle >= chip.cycleMs) { // a cycle completed since the last one
                 chip.lastCycle = millis() - (millis() - chip.readyAt) % chip.cycleMs; chip.cycled = true;
                 chip.rh14 = chip.nextRh14; chip.t14 = chip.nextT14; chip.fetched = false;
+                chip.nextRh14 += chip.rhStep; chip.nextT14 += chip.tStep;
             }
             status = chip.fetched ? 0x1 : 0x0; chip.fetched = true;
         }
@@ -81,5 +84,28 @@ int main() {
     sensor(50.0f, 25.0f, 70.0f, 35.0f, 100, 0, true); delay(100);
     printf("[getString(true)] %s\n", s.getString(true).c_str());
     printf("[getString(false)] %s\n", s.getString(false).c_str());
+
+    // 6. N = 3 readings: each waits for its own 100 ms cycle; humidity climbs 1 % per cycle, so the
+    //    statistics have spread; then the columns join the header and the row.
+    sensor(50.0f, 25.0f, 51.0f, 25.0f, 100, 0, true); chip.rhStep = rhRaw(1.0f); chip.tStep = 0;
+    { T9602 s; s.begin();
+      printf("[N] setReadings(3)=%u setReadings(99)=%u\n", s.setReadings(3), s.setReadings(99));
+      s.setReadings(3); uint32_t t0 = millis(); unsigned n0 = Wire.transactions; bool ok = s.updateMeasurements();
+      printf("[N=3] ok=%d count=%u took %u ms, %u fetches: rh mean=%.4f std=%.4f sterr=%.4f median=%.4f | t mean=%.4f std=%.4f\n",
+             ok, s.getReadingCount(), (unsigned)(millis() - t0), Wire.transactions - n0,
+             s.getHumidityMean(), s.getHumidityStd(), s.getHumiditySterr(), s.getHumidityMedian(), s.getTemperatureMean(), s.getTemperatureStd());
+      s.setStats(true);
+      printf("[N=3] header: %s\n", s.getHeader().c_str());
+      printf("[N=3] string: %s\n", s.getString(false).c_str());
+      // A reading that times out inside the batch: the sensor stalls in command mode after the first cycle.
+      chip.readyAt = 100000; ok = s.updateMeasurements();
+      printf("[N=3, sensor stalled] ok=%d count=%u string: %s\n", ok, s.getReadingCount(), s.getString(false).c_str()); }
+
+    // 7. Reading interface: header, three logged readings, each its own cycle.
+    sensor(50.0f, 25.0f, 51.0f, 25.5f, 100, 0, true); chip.rhStep = rhRaw(1.0f); chip.tStep = tRaw(0.5f) - tRaw(0.0f);
+    { T9602 s; s.begin(); char pb[64];
+      s.beginReadings(3); BufferPrint bh(pb, sizeof pb); s.printHeader(bh); printf("[run] header: %s\n", pb);
+      for (int i = 0; i < 3; i++) { BufferPrint bp(pb, sizeof pb); size_t n = s.logReading(bp); printf("[run] row %d (%zu bytes): %s\n", i, n, pb); }
+      s.endReadings(); printf("[run] count=%u rh median=%.4f\n", s.getReadingCount(), s.getHumidityMedian()); }
     return 0;
 }

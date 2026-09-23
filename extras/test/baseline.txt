@@ -7,3 +7,13 @@ begin with no sensor: 0
 [absent] ok=0 status=3, took 250 ms, 126 fetches: -9999.00,-9999.00,
 [getString(true)] 70.00,35.00,
 [getString(false)] 70.00,35.00,
+[N] setReadings(3)=3 setReadings(99)=16
+[N=3] ok=1 count=3 took 300 ms, 153 fetches: rh mean=52.0020 std=1.0010 sterr=0.5779 median=52.0020 | t mean=24.9969 std=0.0000
+[N=3] header: Humidity [%],Humidity std [%],Humidity sterr [%],Temp Atmos [C],Temp Atmos std [C],Temp Atmos sterr [C],
+[N=3] string: 52.00,1.00,0.58,25.00,0.00,0.00,
+[N=3, sensor stalled] ok=0 count=0 string: -9999.00,-9999.00,-9999.00,-9999.00,-9999.00,-9999.00,
+[run] header: Humidity [%],Temp Atmos [C],
+[run] row 0 (12 bytes): 51.00,25.50,
+[run] row 1 (12 bytes): 52.00,26.00,
+[run] row 2 (12 bytes): 53.00,26.51,
+[run] count=3 rh median=52.0020
