@@ -23,7 +23,7 @@ struct ChipCap {
     uint16_t nextRh14 = 0, nextT14 = 0; // what the next cycle will produce
 } chip;
 static void installChipCap() {
-    Wire.beforeRead = [](TwoWire& w, uint8_t) {
+    Wire.onRequest = [](TwoWire&, uint8_t n, std::deque<uint8_t>& out) {
         uint8_t status;
         if (millis() < chip.readyAt) { status = 0x2; }                        // command mode: no data yet
         else {
@@ -33,14 +33,15 @@ static void installChipCap() {
             }
             status = chip.fetched ? 0x1 : 0x0; chip.fetched = true;
         }
-        w.image[0] = (uint8_t)((status << 6) | ((chip.rh14 >> 8) & 0x3F)); w.image[1] = (uint8_t)(chip.rh14 & 0xFF);
-        w.image[2] = (uint8_t)(chip.t14 >> 6);                               w.image[3] = (uint8_t)((chip.t14 & 0x3F) << 2);
+        uint8_t f[4] = { (uint8_t)((status << 6) | ((chip.rh14 >> 8) & 0x3F)), (uint8_t)(chip.rh14 & 0xFF),
+                         (uint8_t)(chip.t14 >> 6), (uint8_t)((chip.t14 & 0x3F) << 2) };
+        for (uint8_t i = 0; i < n && i < 4; i++) out.push_back(f[i]);   // the same four bytes on every fetch: no register pointer
     };
 }
 
 // Sensor already measured (rh0, t0) and that data was fetched; the next cycle yields (rh1, t1).
 static void sensor(float rh0, float t0, float rh1, float t1, uint32_t cycleMs, uint32_t readyAt, bool fetched) {
-    Wire = TwoWire(); Wire.deviceAddress = 0x28; Wire.autoIncrement = false; installChipCap();
+    Wire = TwoWire(); Wire.deviceAddress = 0x28; installChipCap();
     chip = ChipCap();
     chip.rh14 = rhRaw(rh0); chip.t14 = tRaw(t0); chip.nextRh14 = rhRaw(rh1); chip.nextT14 = tRaw(t1);
     chip.cycleMs = cycleMs; chip.readyAt = readyAt; chip.lastCycle = readyAt; chip.fetched = fetched; chip.cycled = (readyAt == 0);
@@ -55,7 +56,7 @@ static void report(const char* name, T9602& s) {
 }
 
 int main() {
-    T9602 s; Wire.deviceAddress = 0x28; Wire.autoIncrement = false;
+    T9602 s; Wire.deviceAddress = 0x28;
     printf("begin: %d\n", s.begin());
     printf("header: %s\n", s.getHeader().c_str());
 
