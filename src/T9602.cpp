@@ -13,6 +13,29 @@ bool T9602::begin(uint8_t ADR_)
 }
 
 bool T9602::updateMeasurements(){
+	//N independent measurement cycles, then the means; NW_ERROR when none was valid.
+	_rh.reset();
+	_temp.reset();
+	for(uint16_t i = 0; i < _cfg.n; i++) readOnce();
+	RH = _rh.mean(); //NW_ERROR when empty
+	Temp = _temp.mean();
+	return _cfg.n > 0 && _rh.count() == _cfg.n;
+}
+
+uint16_t T9602::setReadings(uint16_t n) { return _cfg.set(n, T9602_CAPACITY); }
+void     T9602::setStats(bool enable)   { _cfg.stats = enable; }
+uint16_t T9602::getReadingCount()       { return _rh.count(); }
+
+float T9602::getHumidityMean()      { return _rh.mean(); }
+float T9602::getHumidityStd()       { return _rh.std(); }
+float T9602::getHumiditySterr()     { return _rh.sterr(); }
+float T9602::getHumidityMedian()    { return _rh.median(); }
+float T9602::getTemperatureMean()   { return _temp.mean(); }
+float T9602::getTemperatureStd()    { return _temp.std(); }
+float T9602::getTemperatureSterr()  { return _temp.sterr(); }
+float T9602::getTemperatureMedian() { return _temp.median(); }
+
+bool T9602::readOnce(){
 
 	uint8_t data[4] = {0}; //Array for raw data from device
 
@@ -35,17 +58,16 @@ bool T9602::updateMeasurements(){
 		status = data[0] >> 6;
 		if(status == 0) break;
 		if(millis() - start >= T9602_TIMEOUT_MS) {
-			RH = -9999;
-			Temp = -9999;
+			//No valid reading this cycle: nothing is appended
 			return false;
 		}
 		delay(2);
 	}
 
 	// Convert RH to percent
-	RH = (float)((((data[0] & 0x3F ) << 8) + data[1]) / 16384.0) * 100.0; 
+	_rh.append((float)((((data[0] & 0x3F ) << 8) + data[1]) / 16384.0) * 100.0); 
 	// Convert Temp
-	Temp = (float)((unsigned((data[2] * 64)) + unsigned((data[3] >> 2 ))) / 16384.0) * 165.0 - 40.0;  
+	_temp.append((float)((unsigned((data[2] * 64)) + unsigned((data[3] >> 2 ))) / 16384.0) * 165.0 - 40.0);  
 	return true;
 }
 
@@ -66,13 +88,54 @@ float T9602::getTemperature()  //Return temp in C
 
 String T9602::getHeader()
 {
-	return "Humidity [%],Temp Atmos [C],";
+	String h = "Humidity [%],";
+	if(_cfg.columns()) h += "Humidity std [%],Humidity sterr [%],";
+	h += "Temp Atmos [C],";
+	if(_cfg.columns()) h += "Temp Atmos std [C],Temp Atmos sterr [C],";
+	return h;
 }
 
 String T9602::getString(bool takeNewReadings)
 {
 	if(takeNewReadings) updateMeasurements();
-	return String(RH) + "," + String(Temp) + ",";
+	String s = String(RH) + ",";
+	if(_cfg.columns()) s += String(getHumidityStd()) + "," + String(getHumiditySterr()) + ",";
+	s += String(Temp) + ",";
+	if(_cfg.columns()) s += String(getTemperatureStd()) + "," + String(getTemperatureSterr()) + ",";
+	return s;
+}
+
+//The reading interface: one reading per logReading(), printed as it is taken.
+void T9602::beginReadings(uint16_t n)
+{
+	(void)n; //Not a Schema 1 device: nothing to declare to the sensor
+	_rh.reset();
+	_temp.reset();
+}
+
+void T9602::endReadings()
+{
+	//No cleanup required currently
+}
+
+size_t T9602::printHeader(Print& out)
+{
+	return out.print("Humidity [%],Temp Atmos [C],");
+}
+
+size_t T9602::printReading(Print& out)
+{
+	size_t n = 0;
+	n += out.print(RH);   n += out.print(',');
+	n += out.print(Temp); n += out.print(',');
+	return n;
+}
+
+size_t T9602::logReading(Print& out)
+{
+	if(readOnce()) { RH = _rh.last(); Temp = _temp.last(); }
+	else { RH = NW_ERROR; Temp = NW_ERROR; }
+	return printReading(out);
 }
 
 bool T9602::sleep()
