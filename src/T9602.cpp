@@ -86,22 +86,58 @@ float T9602::getTemperature()  //Return temp in C
 	return Temp;
 }
 
+//The summary interface: the columns a logger writes, streamed. getHeader() and
+//getString() are the same column set collected into a String, which keeps one
+//definition of it. See LIBRARY-DESIGN.md section 14.
+size_t T9602::printDataHeader(Print& out)
+{
+	size_t n = 0;
+	n += out.print("Humidity [%],");
+	if(_cfg.columns()) n += out.print("Humidity std [%],Humidity sterr [%],");
+	n += out.print("Temp Atmos [C],");
+	if(_cfg.columns()) n += out.print("Temp Atmos std [C],Temp Atmos sterr [C],");
+	return n;
+}
+
+size_t T9602::printDataRow(Print& out)
+{
+	//The values the last updateMeasurements() left, in printDataHeader()'s
+	//order. This takes no reading: the caller has already acquired, and a row
+	//written to two sinks must not acquire twice.
+	size_t n = 0;
+	n += out.print(RH);
+	n += out.print(',');
+	if(_cfg.columns()) {
+		n += out.print(getHumidityStd());
+		n += out.print(',');
+		n += out.print(getHumiditySterr());
+		n += out.print(',');
+	}
+	n += out.print(Temp);
+	n += out.print(',');
+	if(_cfg.columns()) {
+		n += out.print(getTemperatureStd());
+		n += out.print(',');
+		n += out.print(getTemperatureSterr());
+		n += out.print(',');
+	}
+	return n;
+}
+
 String T9602::getHeader()
 {
-	String h = "Humidity [%],";
-	if(_cfg.columns()) h += "Humidity std [%],Humidity sterr [%],";
-	h += "Temp Atmos [C],";
-	if(_cfg.columns()) h += "Temp Atmos std [C],Temp Atmos sterr [C],";
+	String h;
+	NW_StringPrint p(h);
+	printDataHeader(p);
 	return h;
 }
 
 String T9602::getString(bool takeNewReadings)
 {
 	if(takeNewReadings) updateMeasurements();
-	String s = String(RH) + ",";
-	if(_cfg.columns()) s += String(getHumidityStd()) + "," + String(getHumiditySterr()) + ",";
-	s += String(Temp) + ",";
-	if(_cfg.columns()) s += String(getTemperatureStd()) + "," + String(getTemperatureSterr()) + ",";
+	String s;
+	NW_StringPrint p(s);
+	printDataRow(p);
 	return s;
 }
 

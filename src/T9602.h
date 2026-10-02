@@ -118,6 +118,28 @@ class T9602
 	   * @brief Return the header as an Arduino string:
      * "Relative Humidity [%],Temp Atmos [C],"
 	   */
+		/**
+		 * @brief Print the summary columns a logger writes: the means, with the
+		 * statistics columns when they are enabled.
+		 * @details The streaming form of getHeader(), and its definition: that
+		 * function prints through this one into a String. Pass a `File` to write
+		 * the card, `Serial` to write the monitor. Distinct from printHeader(),
+		 * which is the burst interface and carries no statistics.
+		 * @param out Where to print.
+		 * @return Bytes printed.
+		 */
+		size_t printDataHeader(Print& out);
+
+		/**
+		 * @brief Print one summary row, in printDataHeader()'s column order.
+		 * @details Takes no reading: it prints what the last updateMeasurements()
+		 * left, which is what lets a caller write the same row to two sinks
+		 * without acquiring twice.
+		 * @param out Where to print.
+		 * @return Bytes printed.
+		 */
+		size_t printDataRow(Print& out);
+
 		String getHeader();
 
     /**
