@@ -1,23 +1,33 @@
 #include "T9602.h"
 
-T9602::T9602() {
+T9602::T9602()
+  : NW_PlainSensor(T9602_LIBRARY_VERSION, T9602_LIBRARY_COMMIT) {
 }
 
 bool T9602::begin(uint8_t ADR_) {
   ADR = ADR_;
   Wire.begin();
   Wire.beginTransmission(ADR);
-  return Wire.endTransmission() == 0;  //ACK?
+  if (Wire.endTransmission() != 0) {  //ACK?
+    latchFault(NW_PLAIN_NOT_ANSWERING);
+    return false;
+  }
+  return true;
 }
 
 bool T9602::updateMeasurements() {
   //N independent measurement cycles, then the means; NW_ERROR when none was valid.
+  clearReport();  //This reading's own report, not the last one's
   _rh.reset();
   _temp.reset();
   for (uint16_t i = 0; i < _cfg.n; i++) readOnce();
   RH = _rh.mean();  //NW_ERROR when empty
   Temp = _temp.mean();
-  return _cfg.n > 0 && _rh.count() == _cfg.n;
+  bool ok = _cfg.n > 0 && _rh.count() == _cfg.n;
+  //The status bits say which it was: 3 is no sensor on the bus at all, anything
+  //else is a measurement cycle that never came good inside T9602_TIMEOUT_MS.
+  if (!ok) latchFault(status == 3 ? NW_PLAIN_NOT_ANSWERING : NW_PLAIN_TIMEOUT);
+  return ok;
 }
 
 uint16_t T9602::setReadings(uint16_t n) {

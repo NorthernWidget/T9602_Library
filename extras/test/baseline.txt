@@ -17,3 +17,16 @@ begin with no sensor: 0
 [run] row 1 (12 bytes): 52.00,26.00,
 [run] row 2 (12 bytes): 53.00,26.51,
 [run] count=3 rh median=52.0020
+[plain] name=T9602 defaultAddress=0x28
+[plain] wake(0x28)=1
+[plain] acquire()=1 reportKind=0 isFault=0 bootReportKind=0
+[plain] row: 50.00,25.00,
+[plain] note: UnitNone
+[plain] status: T9602,-,-,-,-,0.0.0,,0x00,UnitNone,-,-,-
+[plain, stalled] acquire()=0 reportKind=2 isFault=1 note=T9602Timeout
+[plain, stalled] row: -9999.00,-9999.00,
+[plain, stalled] status: T9602,-,-,-,-,0.0.0,,0x02,T9602Timeout,-,-,-
+[plain, absent] wake(0x28)=0 note=NotAnswering
+[plain, absent] acquire()=0 reportKind=1 isFault=1 note=T9602NotAnswering
+[plain, absent] status: T9602,-,-,-,-,0.0.0,,0x01,T9602NotAnswering,-,-,-
+[plain, recovered] acquire()=1 reportKind=0 isFault=0 note=UnitNone

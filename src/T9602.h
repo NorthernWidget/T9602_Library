@@ -3,7 +3,16 @@
 
 #include "Arduino.h"
 #include "Wire.h"
-#include <NW_Core.h>  //NW_Core: NW_Readings (statistics), NW_ReadingsConfig, NW_ERROR
+#include <NW_Core.h>  //NW_Core: NW_PlainSensor, NW_Readings (statistics), NW_ReadingsConfig, NW_ERROR
+
+//Build identity: this library's version (held equal to library.properties by
+//NW-Tests/version_check.py) and its build commit, which the NW-Build wrapper
+//sets from git and an Arduino IDE build leaves blank. Both reach a logger's
+//status file.
+#define T9602_LIBRARY_VERSION "0.0.0"
+#ifndef T9602_LIBRARY_COMMIT
+#define T9602_LIBRARY_COMMIT ""
+#endif
 
 /// Readings per updateMeasurements() are kept in static arrays of this
 /// capacity (no heap); setReadings(n) clamps to it. Override before the
@@ -25,8 +34,11 @@
  * @brief Library for the IP67-rated T9602 I2C temperature and relative
  *        humidity sensor.
  */
-class T9602 {
+class T9602 : public NW_PlainSensor {
 public:
+  /** @brief Default I2C address. The part fixes it: there is no strapping pin and no register to change it. */
+  static constexpr uint8_t DEFAULT_ADDRESS = 0x28;
+
   /**
 	   * @brief Instantiate the T9602 sensor class
 	   */
@@ -39,7 +51,7 @@ public:
      *                  in case you make this change elsewhere.
      * @return `true` if the sensor acknowledges its address on the bus.
 	   */
-  bool begin(uint8_t ADR_ = 0x28);  //use default address
+  bool begin(uint8_t ADR_ = DEFAULT_ADDRESS);  //use default address
 
   /**
      * @brief Measure relative humidity [%] and temperature [degrees C].
@@ -113,7 +125,7 @@ public:
 		 * @param out Where to print.
 		 * @return Bytes printed.
 		 */
-  size_t printDataHeader(Print& out);
+  size_t printDataHeader(Print& out) override;
 
   /**
 		 * @brief Print one summary row, in printDataHeader()'s column order.
@@ -123,7 +135,32 @@ public:
 		 * @param out Where to print.
 		 * @return Bytes printed.
 		 */
-  size_t printDataRow(Print& out);
+  size_t printDataRow(Print& out) override;
+
+  //--- NW_Sensor, through NW_PlainSensor: what a logger asks of a sensor ---
+  //The T9602 has no Page 0 and no Report register, so it names itself here
+  //rather than on the bus and NW_Logger::discover() cannot find it. A sketch
+  //names it and watch() logs its columns like any other sensor's.
+
+  /** @brief The part's name, for the status file and for a sketch's own use. */
+  const char* name() const override {
+    return "T9602";
+  }
+
+  /** @brief The address it answers at unless the logger says otherwise. */
+  uint8_t defaultAddress() const override {
+    return DEFAULT_ADDRESS;
+  }
+
+  /** @brief Come back on the bus after the logger cut the sensor rail to sleep. */
+  bool wake(uint8_t address) override {
+    return begin(address);
+  }
+
+  /** @brief Take this row's readings, for printDataRow() to print. */
+  bool acquire() override {
+    return updateMeasurements();
+  }
 
   /**
 	   * @brief Dummy function to enable sleep mode.

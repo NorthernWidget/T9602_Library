@@ -90,6 +90,25 @@ static const char* head(T9602& s) {
   return b;
 }
 
+static const char* note(T9602& s, bool beginFailed = false) {
+  static char buffers[2][64];
+  static uint8_t which = 0;
+  char* b = buffers[which];
+  which = (uint8_t)(1 - which);
+  NW_BufferPrint p(b, sizeof buffers[0]);
+  s.printNote(p, beginFailed);
+  if (p.truncated()) printf("  TRUNCATED: note() needs a bigger buffer\n");
+  return b;
+}
+
+static const char* status(T9602& s) {
+  static char b[256];
+  NW_BufferPrint p(b, sizeof b);
+  s.printStatus(p);
+  if (p.truncated()) printf("  TRUNCATED: status() needs a bigger buffer\n");
+  return b;
+}
+
 static void report(const char* name, T9602& s) {
   uint32_t t0 = millis();
   unsigned n0 = Wire.transactions;
@@ -175,6 +194,57 @@ int main() {
     }
     s.endReadings();
     printf("[run] count=%u rh median=%.4f\n", s.getReadingCount(), s.getHumidityMedian());
+  }
+
+  // 8. The NW_Sensor half, through NW_PlainSensor: what a logger asks of a
+  //    sensor with no identity page. The status row carries a lone `-` wherever
+  //    a Page 0 would have answered, and the note word reads like any other
+  //    sensor's because the kinds are the specification's universal ones.
+  sensor(50.0f, 25.0f, 51.0f, 25.0f, 100, 0, false);
+  chip.rh14 = rhRaw(50.0f);
+  chip.t14 = tRaw(25.0f);
+  chip.rhStep = 0;
+  chip.tStep = 0;
+  {
+    T9602 s;
+    printf("[plain] name=%s defaultAddress=0x%02X\n", s.name(), s.defaultAddress());
+    //Each call on its own line, then printed: a printf evaluates its arguments
+    //in no particular order, and reading a report beside the acquire() that
+    //latches it reports the one from before.
+    bool woke = s.wake(0x28);
+    printf("[plain] wake(0x28)=%d\n", woke);
+    bool got = s.acquire();
+    printf("[plain] acquire()=%d reportKind=%u isFault=%d bootReportKind=%u\n",
+           got, s.reportKind(), s.reportIsFault(), s.bootReportKind());
+    printf("[plain] row: %s\n", row(s));
+    printf("[plain] note: %s\n", note(s));
+    printf("[plain] status: %s\n", status(s));
+
+    // A cycle that never comes good: the chip stays in command mode past the
+    // timeout. Kind 2, and the row is -9999 in both columns.
+    chip.readyAt = 100000;
+    got = s.acquire();
+    printf("[plain, stalled] acquire()=%d reportKind=%u isFault=%d note=%s\n",
+           got, s.reportKind(), s.reportIsFault(), note(s));
+    printf("[plain, stalled] row: %s\n", row(s));
+    printf("[plain, stalled] status: %s\n", status(s));
+    chip.readyAt = 0;
+
+    // Nothing on the bus at all: the reads give 0xFF, so the status bits read
+    // 11 = no data, and the kind is "not answering" rather than a timeout.
+    Wire.present = false;
+    woke = s.wake(0x28);
+    printf("[plain, absent] wake(0x28)=%d note=%s\n", woke, note(s, true));
+    got = s.acquire();
+    printf("[plain, absent] acquire()=%d reportKind=%u isFault=%d note=%s\n",
+           got, s.reportKind(), s.reportIsFault(), note(s));
+    printf("[plain, absent] status: %s\n", status(s));
+    Wire.present = true;
+
+    // And a good reading clears it: a report belongs to its own reading.
+    got = s.acquire();
+    printf("[plain, recovered] acquire()=%d reportKind=%u isFault=%d note=%s\n",
+           got, s.reportKind(), s.reportIsFault(), note(s));
   }
   return 0;
 }
