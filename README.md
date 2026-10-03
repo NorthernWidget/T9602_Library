@@ -70,80 +70,58 @@ This code is intended for any generic Arduino system. It is not proven.
 // Include the T9602 library
 #include "T9602.h"
 
-// Declare variables -- just as strings
-String header;
-String data;
-
 // Instantiate class
 T9602 mySensor;
 
 void setup(){
     // Begin Serial connection to computer at 38400 baud
     Serial.begin(38400);
-    // Obtain the header just once
-    header = mySensor.getHeader();
-    // Print the header to the serial monitor
-    Serial.println(header);
+    // Print the header just once, straight to the port
+    mySensor.printDataHeader(Serial);
+    Serial.println();
 }
 
 void loop(){
     // Take one reading every (10 + time to take reading) seconds
     // and print it to the screen
     mySensor.updateMeasurements();
-    data = mySensor.getString();
-    Serial.println(data);
+    mySensor.printDataRow(Serial);
+    Serial.println();
     delay(10000); // Wait 10 seconds before the next reading, inefficiently
 }
 ```
 
-`updateMeasurements()` sends a measurement request and then fetches data until the sensor's status bits report a valid, not-yet-fetched measurement. It returns `true` on success and `false` after `T9602_TIMEOUT_MS` (250 ms by default; define it before the include to change it) without valid data, in which case the stored values are NW_ERROR (-9999). `getStatus()` returns the last status bits: 0 valid, 1 stale (already fetched since the last measurement cycle), 2 command mode (the sensor is still starting up), 3 no data (no sensor answered). `getString(true)` takes a new reading before returning it.
+`updateMeasurements()` sends a measurement request and then fetches data until the sensor's status bits report a valid, not-yet-fetched measurement. It returns `true` on success and `false` after `T9602_TIMEOUT_MS` (250 ms by default; define it before the include to change it) without valid data, in which case the stored values are NW_ERROR (-9999). `getStatus()` returns the last status bits: 0 valid, 1 stale (already fetched since the last measurement cycle), 2 command mode (the sensor is still starting up), 3 no data (no sensor answered). `printDataRow(out)` prints what the last `updateMeasurements()` left, and takes no reading of its own, so the same row can go to the card and the monitor without measuring twice. Both it and `printDataHeader(out)` write into any `Print`: no row is composed in RAM.
 
-`setReadings(n)` sets how many readings `updateMeasurements()` takes (each is its own measurement cycle, so they are independent; clamped to `T9602_CAPACITY`, default 16, override before the include); the getters then return the means, and `getHumidityMean()`, `getHumidityStd()`, `getHumiditySterr()`, `getHumidityMedian()`, the same for temperature, and `getReadingCount()` read the stored readings. With `setStats(true)` the std and sterr columns join `getHeader()` and `getString()`. For one row per reading to a file, `beginReadings(n)`, `printHeader(out)`, `logReading(out)` n times, `endReadings()`, to any `Print` (an SdFat `File`, `Serial`). Requires the [NW_Core](https://github.com/NorthernWidget/NW_Core) library.
+`setReadings(n)` sets how many readings `updateMeasurements()` takes (each is its own measurement cycle, so they are independent; clamped to `T9602_CAPACITY`, default 16, override before the include); the getters then return the means, and `getHumidityMean()`, `getHumidityStd()`, `getHumiditySterr()`, `getHumidityMedian()`, the same for temperature, and `getReadingCount()` read the stored readings. With `setStats(true)` the std and sterr columns join `printDataHeader()` and `printDataRow()`. For one row per reading to a file, `beginReadings(n)`, `printHeader(out)`, `logReading(out)` n times, `endReadings()`, to any `Print` (an SdFat `File`, `Serial`). Requires the [NW_Core](https://github.com/NorthernWidget/NW_Core) library.
 
 ### Northern Widget Margay code
 
 The [Margay data logger](github.com/NorthernWidget-Skunkworks/Project-Margay) is the lightweight and low-power open-source data-logging option from Northern Widget. It saves data to a local SD card and includes on-board status measurements and a low-drift real-time clock. We have written [a library to interface with the Margay](github.com/NorthernWidget-Skunkworks/Margay_Library), which can in turn be used to link the Margay with sensors.
 
+**A Margay cannot yet hold a T9602.** A logger writes its file from the sensors `watch()` gave it, and `watch()` takes an `NW_Sensor`: a device that names itself in Page 0 and reports through the Schema 1 Report register ([LIBRARY-DESIGN.md](https://github.com/NorthernWidget/NW-Device-Specification/blob/master/LIBRARY-DESIGN.md) section 14). The T9602 is an Amphenol part with neither, so this sketch logs the logger's own on-board columns and prints the T9602's to the serial monitor; its columns do not reach the card. Read that as the open end of the work rather than as the intended shape.
+
 ```c++
 // Include the T9602 library
-#include "Margay.h"
-#include "T9602.h"
-
-// Declare variables -- just as strings
-String header;
-String data;
+#include <Margay.h>
+#include <T9602.h>
 
 // Instantiate classes
 T9602 mySensor;
-Margay Logger(Model_2v0, Build_B); // Margay v2.2; UPDATE CODE TO INDICATE THIS
-
-// Empty header to start; will include sensor labels and information
-String Header = "";
-
-// I2C address for T9602
-uint8_t I2CVals[] = {0x28};
+Margay Logger(MODEL_2v0, BUILD_B); // Margay v2.2; UPDATE CODE TO INDICATE THIS
 
 //Number of seconds between readings
 uint32_t updateRate = 60;
 
 void setup(){
-    Header = Header + mySensor.getHeader();
-    Logger.begin(I2CVals, sizeof(I2CVals), Header);
-    initialize();
+    mySensor.begin();
+    mySensor.printDataHeader(Serial);
+    Serial.println();
+    Logger.begin();
 }
 
 void loop(){
-    initialize();
-    Logger.Run(update, updateRate);
-}
-
-String update() {
-    initialize();
-    return mySensor.getString();
-}
-
-void initialize(){
-    mySensor.begin();
+    Logger.run(updateRate);
 }
 ```
 
