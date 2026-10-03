@@ -86,9 +86,8 @@ float T9602::getTemperature()  //Return temp in C
 	return Temp;
 }
 
-//The summary interface: the columns a logger writes, streamed. getHeader() and
-//getString() are the same column set collected into a String, which keeps one
-//definition of it. See LIBRARY-DESIGN.md section 14.
+//The summary interface: the columns a logger writes, streamed straight into the
+//file. No row is composed in RAM; see LIBRARY-DESIGN.md section 14.
 size_t T9602::printDataHeader(Print& out)
 {
 	size_t n = 0;
@@ -124,22 +123,7 @@ size_t T9602::printDataRow(Print& out)
 	return n;
 }
 
-String T9602::getHeader()
-{
-	String h;
-	NW_StringPrint p(h);
-	printDataHeader(p);
-	return h;
-}
 
-String T9602::getString(bool takeNewReadings)
-{
-	if(takeNewReadings) updateMeasurements();
-	String s;
-	NW_StringPrint p(s);
-	printDataRow(p);
-	return s;
-}
 
 //The reading interface: one reading per logReading(), printed as it is taken.
 void T9602::beginReadings(uint16_t n)

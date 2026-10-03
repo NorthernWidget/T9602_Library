@@ -60,7 +60,7 @@ class T9602
      * @return The number actually set.
      */
     uint16_t setReadings(uint16_t n);
-    /** @brief Enable or disable humidity and temperature std and sterr columns in getString()/getHeader(). */
+    /** @brief Enable or disable humidity and temperature std and sterr columns in printDataHeader()/printDataRow(). */
     void setStats(bool enable);
     /** @brief Number of valid readings stored by the last updateMeasurements(). */
     uint16_t getReadingCount();
@@ -104,27 +104,13 @@ class T9602
 	   */
 		float getTemperature();
 
-    /**
-	   * @brief The most important function for the user! Returns all data as a
-	   * comma-separated string: "RH,T,".
-	   * @details This string is: "RELATIVE_HUMIDITY,TEMPERATURE,".
-     * It is written with the code: return String(RH) + "," + String(Temp) + ","
-     * @param[in] takeNewReadings: if `true` run `updateMeasurements` before
-     * returning values. Otherwise, just return values.
-     */
-		String getString(bool takeNewReadings = false);
-
-    /**
-	   * @brief Return the header as an Arduino string:
-     * "Relative Humidity [%],Temp Atmos [C],"
-	   */
 		/**
 		 * @brief Print the summary columns a logger writes: the means, with the
 		 * statistics columns when they are enabled.
-		 * @details The streaming form of getHeader(), and its definition: that
-		 * function prints through this one into a String. Pass a `File` to write
-		 * the card, `Serial` to write the monitor. Distinct from printHeader(),
-		 * which is the burst interface and carries no statistics.
+		 * @details "Humidity [%],Temp Atmos [C]," with std and sterr columns
+		 * after each value when setStats(true) is on. Pass a `File` to write the
+		 * card, `Serial` to write the monitor. Distinct from printHeader(), which
+		 * is the burst interface and carries no statistics.
 		 * @param out Where to print.
 		 * @return Bytes printed.
 		 */
@@ -139,8 +125,6 @@ class T9602
 		 * @return Bytes printed.
 		 */
 		size_t printDataRow(Print& out);
-
-		String getHeader();
 
     /**
 	   * @brief Dummy function to enable sleep mode.

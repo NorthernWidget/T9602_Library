@@ -52,17 +52,37 @@ static void sensor(float rh0, float t0, float rh1, float t1, uint32_t cycleMs, u
     _millis_counter() = 0;
 }
 
+// The String functions are gone (section 15 family B). This helper holds the
+// harness's output identical by doing what getString() with no argument did: it
+// prints the stored reading and takes none. It refuses to hide a truncation,
+// which would otherwise print a short line and pass.
+static const char* row(T9602& s) {
+    static char b[256];
+    NW_BufferPrint p(b, sizeof b);
+    s.printDataRow(p);
+    if (p.truncated()) printf("  TRUNCATED: row() needs a bigger buffer\n");
+    return b;
+}
+
+static const char* head(T9602& s) {
+    static char b[256];
+    NW_BufferPrint p(b, sizeof b);
+    s.printDataHeader(p);
+    if (p.truncated()) printf("  TRUNCATED: head() needs a bigger buffer\n");
+    return b;
+}
+
 static void report(const char* name, T9602& s) {
     uint32_t t0 = millis(); unsigned n0 = Wire.transactions;
     bool ok = s.updateMeasurements();
     printf("[%s] ok=%d status=%u, took %u ms, %u fetches: %s\n", name, ok, s.getStatus(),
-           (unsigned)(millis() - t0), Wire.transactions - n0, s.getString().c_str());
+           (unsigned)(millis() - t0), Wire.transactions - n0, row(s));
 }
 
 int main() {
     T9602 s; Wire.deviceAddress = 0x28;
     printf("begin: %d\n", s.begin());
-    printf("header: %s\n", s.getHeader().c_str());
+    printf("header: %s\n", head(s));
 
     // 1. Fresh data waiting: status 00 on the first fetch.
     sensor(40.0f, 20.0f, 50.0f, 25.0f, 100, 0, false); chip.rh14 = rhRaw(50.0f); chip.t14 = tRaw(25.0f);
@@ -81,10 +101,11 @@ int main() {
     printf("begin with no sensor: %d\n", s.begin());
     report("absent", s);
 
-    // 5. getString(true) must take a new reading.
+    // 5. A row after a new reading, and the same row again without one.
     sensor(50.0f, 25.0f, 70.0f, 35.0f, 100, 0, true); delay(100);
-    printf("[getString(true)] %s\n", s.getString(true).c_str());
-    printf("[getString(false)] %s\n", s.getString(false).c_str());
+    s.updateMeasurements();
+    printf("[new reading] %s\n", row(s));
+    printf("[stored reading] %s\n", row(s));
 
     // 6. N = 3 readings: each waits for its own 100 ms cycle; humidity climbs 1 % per cycle, so the
     //    statistics have spread; then the columns join the header and the row.
@@ -96,11 +117,11 @@ int main() {
              ok, s.getReadingCount(), (unsigned)(millis() - t0), Wire.transactions - n0,
              s.getHumidityMean(), s.getHumidityStd(), s.getHumiditySterr(), s.getHumidityMedian(), s.getTemperatureMean(), s.getTemperatureStd());
       s.setStats(true);
-      printf("[N=3] header: %s\n", s.getHeader().c_str());
-      printf("[N=3] string: %s\n", s.getString(false).c_str());
+      printf("[N=3] header: %s\n", head(s));
+      printf("[N=3] string: %s\n", row(s));
       // A reading that times out inside the batch: the sensor stalls in command mode after the first cycle.
       chip.readyAt = 100000; ok = s.updateMeasurements();
-      printf("[N=3, sensor stalled] ok=%d count=%u string: %s\n", ok, s.getReadingCount(), s.getString(false).c_str()); }
+      printf("[N=3, sensor stalled] ok=%d count=%u string: %s\n", ok, s.getReadingCount(), row(s)); }
 
     // 7. Reading interface: header, three logged readings, each its own cycle.
     sensor(50.0f, 25.0f, 51.0f, 25.5f, 100, 0, true); chip.rhStep = rhRaw(1.0f); chip.tStep = tRaw(0.5f) - tRaw(0.0f);
