@@ -225,13 +225,15 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-t9602">function T9602</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-setreadings">function setReadings</a></li><li><a href="#function-setstats">function setStats</a></li><li><a href="#function-getreadingcount">function getReadingCount</a></li><li><a href="#function-getstatus">function getStatus</a></li><li><a href="#function-gethumidity">function getHumidity</a></li><li><a href="#function-gethumiditymean">function getHumidityMean</a></li><li><a href="#function-gethumiditystd">function getHumidityStd</a></li><li><a href="#function-gethumiditysterr">function getHumiditySterr</a></li><li><a href="#function-gethumiditymedian">function getHumidityMedian</a></li><li><a href="#function-gettemperaturemean">function getTemperatureMean</a></li><li><a href="#function-gettemperaturestd">function getTemperatureStd</a></li><li><a href="#function-gettemperaturesterr">function getTemperatureSterr</a></li><li><a href="#function-gettemperaturemedian">function getTemperatureMedian</a></li><li><a href="#function-gettemperature">function getTemperature</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-sleep">function sleep</a></li><li><a href="#function-printheader">function printHeader</a></li><li><a href="#function-printreading">function printReading</a></li><li><a href="#function-logreading">function logReading</a></li><li><a href="#function-beginreadings">function beginReadings</a></li><li><a href="#function-endreadings">function endReadings</a></li></ul></li></ul>
+              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#public-attributes">Public Attributes</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-t9602">function T9602</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-setreadings">function setReadings</a></li><li><a href="#function-setstats">function setStats</a></li><li><a href="#function-getreadingcount">function getReadingCount</a></li><li><a href="#function-getstatus">function getStatus</a></li><li><a href="#function-gethumidity">function getHumidity</a></li><li><a href="#function-gethumiditymean">function getHumidityMean</a></li><li><a href="#function-gethumiditystd">function getHumidityStd</a></li><li><a href="#function-gethumiditysterr">function getHumiditySterr</a></li><li><a href="#function-gethumiditymedian">function getHumidityMedian</a></li><li><a href="#function-gettemperaturemean">function getTemperatureMean</a></li><li><a href="#function-gettemperaturestd">function getTemperatureStd</a></li><li><a href="#function-gettemperaturesterr">function getTemperatureSterr</a></li><li><a href="#function-gettemperaturemedian">function getTemperatureMedian</a></li><li><a href="#function-gettemperature">function getTemperature</a></li><li><a href="#function-printdataheader">function printDataHeader</a></li><li><a href="#function-printdatarow">function printDataRow</a></li><li><a href="#function-name">function name</a></li><li><a href="#function-defaultaddress">function defaultAddress</a></li><li><a href="#function-wake">function wake</a></li><li><a href="#function-acquire">function acquire</a></li><li><a href="#function-sleep">function sleep</a></li><li><a href="#function-printheader">function printHeader</a></li><li><a href="#function-printreading">function printReading</a></li><li><a href="#function-logreading">function logReading</a></li><li><a href="#function-beginreadings">function beginReadings</a></li><li><a href="#function-endreadings">function endReadings</a></li></ul></li><li><a href="#public-attributes-documentation">Public Attributes Documentation</a><ul><li><a href="#variable-default_address">variable DEFAULT_ADDRESS</a></li></ul></li></ul>
             </nav>
           </aside>
         
         <p>Library for the IP67-rated <a href="">T9602</a> I2C temperature and relative humidity sensor.</p>
 
 <p><code class="language-plaintext highlighter-rouge">#include &lt;T9602.h&gt;</code></p>
+
+<p>Inherits from NW_PlainSensor</p>
 
 <h2 id="public-functions">Public Functions</h2>
 
@@ -249,7 +251,7 @@
     </tr>
     <tr>
       <td>bool</td>
-      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-begin">begin</a></strong>(uint8<em>t ADR</em> =0x28)<br />Begin communications with the <a href="/T9602_Library/Classes/classT9602/">T9602</a> sensor.</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-begin">begin</a></strong>(uint8<em>t ADR</em> =<a href="/T9602_Library/Classes/classT9602/#variable-default-address">DEFAULT_ADDRESS</a>)<br />Begin communications with the <a href="/T9602_Library/Classes/classT9602/">T9602</a> sensor.</td>
     </tr>
     <tr>
       <td>bool</td>
@@ -261,7 +263,7 @@
     </tr>
     <tr>
       <td>void</td>
-      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-setstats">setStats</a></strong>(bool enable)<br />Enable or disable humidity and temperature std and sterr columns in <a href="">getString()</a>/getHeader().</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-setstats">setStats</a></strong>(bool enable)<br />Enable or disable humidity and temperature std and sterr columns in <a href="">printDataHeader()</a>/printDataRow().</td>
     </tr>
     <tr>
       <td>uint16_t</td>
@@ -312,12 +314,28 @@
       <td><strong><a href="/T9602_Library/Classes/classT9602/#function-gettemperature">getTemperature</a></strong>()<br />Return the stored temperature [degrees C].</td>
     </tr>
     <tr>
-      <td>String</td>
-      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-getstring">getString</a></strong>(bool takeNewReadings =false)<br />The most important function for the user! Returns all data as a comma-separated string: “RH,T,”.</td>
+      <td>size_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-printdataheader">printDataHeader</a></strong>(Print &amp; out) override<br />Print the summary columns a logger writes: the means, with the statistics columns when they are enabled.</td>
     </tr>
     <tr>
-      <td>String</td>
-      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-getheader">getHeader</a></strong>()<br />Return the header as an Arduino string: “Relative Humidity [%],Temp Atmos [C],”.</td>
+      <td>size_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-printdatarow">printDataRow</a></strong>(Print &amp; out) override<br />Print one summary row, in <a href="/T9602_Library/Classes/classT9602/#function-printdataheader">printDataHeader()</a>’s column order.</td>
+    </tr>
+    <tr>
+      <td>const char *</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-name">name</a></strong>() const override<br />The part’s name, for the status file and for a sketch’s own use.</td>
+    </tr>
+    <tr>
+      <td>uint8_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-defaultaddress">defaultAddress</a></strong>() const override<br />The address it answers at unless the logger says otherwise.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-wake">wake</a></strong>(uint8_t address) override<br />Come back on the bus after the logger cut the sensor rail to sleep.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#function-acquire">acquire</a></strong>() override<br />Take this row’s readings, for <a href="/T9602_Library/Classes/classT9602/#function-printdatarow">printDataRow()</a> to print.</td>
     </tr>
     <tr>
       <td>bool</td>
@@ -346,6 +364,23 @@
   </tbody>
 </table>
 
+<h2 id="public-attributes">Public Attributes</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>constexpr uint8_t</td>
+      <td><strong><a href="/T9602_Library/Classes/classT9602/#variable-default-address">DEFAULT_ADDRESS</a></strong> <br />Default I2C address. The part fixes it: there is no strapping pin and no register to change it.</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2 id="public-functions-documentation">Public Functions Documentation</h2>
 
 <h3 id="function-t9602">function T9602</h3>
@@ -358,7 +393,7 @@
 <h3 id="function-begin">function begin</h3>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">begin</span><span class="p">(</span>
-    <span class="kt">uint8_t</span> <span class="n">ADR_</span> <span class="o">=</span><span class="mh">0x28</span>
+    <span class="kt">uint8_t</span> <span class="n">ADR_</span> <span class="o">=</span><span class="n">DEFAULT_ADDRESS</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -401,7 +436,7 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Enable or disable humidity and temperature std and sterr columns in <a href="">getString()</a>/getHeader().</p>
+<p>Enable or disable humidity and temperature std and sterr columns in <a href="">printDataHeader()</a>/printDataRow().</p>
 
 <h3 id="function-getreadingcount">function getReadingCount</h3>
 
@@ -489,29 +524,73 @@
 
 <p>Return the stored temperature [degrees C].</p>
 
-<h3 id="function-getstring">function getString</h3>
+<h3 id="function-printdataheader">function printDataHeader</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">getString</span><span class="p">(</span>
-    <span class="kt">bool</span> <span class="n">takeNewReadings</span> <span class="o">=</span><span class="nb">false</span>
-<span class="p">)</span>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">printDataHeader</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
+<span class="p">)</span> <span class="k">override</span>
 </code></pre></div></div>
 
-<p>The most important function for the user! Returns all data as a comma-separated string: “RH,T,”.</p>
+<p>Print the summary columns a logger writes: the means, with the statistics columns when they are enabled.</p>
 
 <p><strong>Parameters</strong>:</p>
 
 <ul>
-  <li><strong>takeNewReadings</strong> if <code class="language-plaintext highlighter-rouge">true</code> run <code class="language-plaintext highlighter-rouge">updateMeasurements</code> before returning values. Otherwise, just return values.</li>
+  <li><strong>out</strong> Where to print.</li>
 </ul>
 
-<p>This string is: “RELATIVE_HUMIDITY,TEMPERATURE,”. It is written with the code: return String(RH) + “,” + String(Temp) + “,”</p>
+<p><strong>Return</strong>: Bytes printed.</p>
 
-<h3 id="function-getheader">function getHeader</h3>
+<p>“Humidity [%],Temp Atmos [C],” with std and sterr columns after each value when setStats(true) is on. Pass a <code class="language-plaintext highlighter-rouge">File</code> to write the card, <code class="language-plaintext highlighter-rouge">Serial</code> to write the monitor. Distinct from <a href="/T9602_Library/Classes/classT9602/#function-printheader">printHeader()</a>, which is the burst interface and carries no statistics.</p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">getHeader</span><span class="p">()</span>
+<h3 id="function-printdatarow">function printDataRow</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">printDataRow</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
+<span class="p">)</span> <span class="k">override</span>
 </code></pre></div></div>
 
-<p>Return the header as an Arduino string: “Relative Humidity [%],Temp Atmos [C],”.</p>
+<p>Print one summary row, in <a href="/T9602_Library/Classes/classT9602/#function-printdataheader">printDataHeader()</a>’s column order.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>out</strong> Where to print.</li>
+</ul>
+
+<p><strong>Return</strong>: Bytes printed.</p>
+
+<p>Takes no reading: it prints what the last <a href="/T9602_Library/Classes/classT9602/#function-updatemeasurements">updateMeasurements()</a> left, which is what lets a caller write the same row to two sinks without acquiring twice.</p>
+
+<h3 id="function-name">function name</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">()</span> <span class="k">const</span> <span class="k">override</span>
+</code></pre></div></div>
+
+<p>The part’s name, for the status file and for a sketch’s own use.</p>
+
+<h3 id="function-defaultaddress">function defaultAddress</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="kt">uint8_t</span> <span class="n">defaultAddress</span><span class="p">()</span> <span class="k">const</span> <span class="k">override</span>
+</code></pre></div></div>
+
+<p>The address it answers at unless the logger says otherwise.</p>
+
+<h3 id="function-wake">function wake</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="kt">bool</span> <span class="n">wake</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">address</span>
+<span class="p">)</span> <span class="k">override</span>
+</code></pre></div></div>
+
+<p>Come back on the bus after the logger cut the sensor rail to sleep.</p>
+
+<h3 id="function-acquire">function acquire</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="kt">bool</span> <span class="n">acquire</span><span class="p">()</span> <span class="k">override</span>
+</code></pre></div></div>
+
+<p>Take this row’s readings, for <a href="/T9602_Library/Classes/classT9602/#function-printdatarow">printDataRow()</a> to print.</p>
 
 <h3 id="function-sleep">function sleep</h3>
 
@@ -577,9 +656,18 @@
 
 <p>End a run of readings.</p>
 
+<h2 id="public-attributes-documentation">Public Attributes Documentation</h2>
+
+<h3 id="variable-default_address">variable DEFAULT_ADDRESS</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint8_t</span> <span class="n">DEFAULT_ADDRESS</span> <span class="o">=</span> <span class="mh">0x28</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Default I2C address. The part fixes it: there is no strapping pin and no register to change it.</p>
+
 <hr />
 
-<p>Updated on 2026-09-23 at 16:11:12 +0000</p>
+<p>Updated on 2026-10-04 at 04:51:47 +0000</p>
 
         
       </section>

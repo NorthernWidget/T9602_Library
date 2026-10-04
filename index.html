@@ -333,79 +333,57 @@
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Include the T9602 library</span>
 <span class="cp">#include</span> <span class="cpf">"T9602.h"</span><span class="cp">
 </span>
-<span class="c1">// Declare variables -- just as strings</span>
-<span class="n">String</span> <span class="n">header</span><span class="p">;</span>
-<span class="n">String</span> <span class="n">data</span><span class="p">;</span>
-
 <span class="c1">// Instantiate class</span>
 <span class="n">T9602</span> <span class="n">mySensor</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="nf">setup</span><span class="p">(){</span>
     <span class="c1">// Begin Serial connection to computer at 38400 baud</span>
     <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">38400</span><span class="p">);</span>
-    <span class="c1">// Obtain the header just once</span>
-    <span class="n">header</span> <span class="o">=</span> <span class="n">mySensor</span><span class="p">.</span><span class="n">getHeader</span><span class="p">();</span>
-    <span class="c1">// Print the header to the serial monitor</span>
-    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">header</span><span class="p">);</span>
+    <span class="c1">// Print the header just once, straight to the port</span>
+    <span class="n">mySensor</span><span class="p">.</span><span class="n">printDataHeader</span><span class="p">(</span><span class="n">Serial</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="nf">loop</span><span class="p">(){</span>
     <span class="c1">// Take one reading every (10 + time to take reading) seconds</span>
     <span class="c1">// and print it to the screen</span>
     <span class="n">mySensor</span><span class="p">.</span><span class="n">updateMeasurements</span><span class="p">();</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">mySensor</span><span class="p">.</span><span class="n">getString</span><span class="p">();</span>
-    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">mySensor</span><span class="p">.</span><span class="n">printDataRow</span><span class="p">(</span><span class="n">Serial</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
     <span class="n">delay</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span> <span class="c1">// Wait 10 seconds before the next reading, inefficiently</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><code class="language-plaintext highlighter-rouge">updateMeasurements()</code> sends a measurement request and then fetches data until the sensor’s status bits report a valid, not-yet-fetched measurement. It returns <code class="language-plaintext highlighter-rouge">true</code> on success and <code class="language-plaintext highlighter-rouge">false</code> after <code class="language-plaintext highlighter-rouge">T9602_TIMEOUT_MS</code> (250 ms by default; define it before the include to change it) without valid data, in which case the stored values are NW_ERROR (-9999). <code class="language-plaintext highlighter-rouge">getStatus()</code> returns the last status bits: 0 valid, 1 stale (already fetched since the last measurement cycle), 2 command mode (the sensor is still starting up), 3 no data (no sensor answered). <code class="language-plaintext highlighter-rouge">getString(true)</code> takes a new reading before returning it.</p>
+<p><code class="language-plaintext highlighter-rouge">updateMeasurements()</code> sends a measurement request and then fetches data until the sensor’s status bits report a valid, not-yet-fetched measurement. It returns <code class="language-plaintext highlighter-rouge">true</code> on success and <code class="language-plaintext highlighter-rouge">false</code> after <code class="language-plaintext highlighter-rouge">T9602_TIMEOUT_MS</code> (250 ms by default; define it before the include to change it) without valid data, in which case the stored values are NW_ERROR (-9999). <code class="language-plaintext highlighter-rouge">getStatus()</code> returns the last status bits: 0 valid, 1 stale (already fetched since the last measurement cycle), 2 command mode (the sensor is still starting up), 3 no data (no sensor answered). <code class="language-plaintext highlighter-rouge">printDataRow(out)</code> prints what the last <code class="language-plaintext highlighter-rouge">updateMeasurements()</code> left, and takes no reading of its own, so the same row can go to the card and the monitor without measuring twice. Both it and <code class="language-plaintext highlighter-rouge">printDataHeader(out)</code> write into any <code class="language-plaintext highlighter-rouge">Print</code>: no row is composed in RAM.</p>
 
-<p><code class="language-plaintext highlighter-rouge">setReadings(n)</code> sets how many readings <code class="language-plaintext highlighter-rouge">updateMeasurements()</code> takes (each is its own measurement cycle, so they are independent; clamped to <code class="language-plaintext highlighter-rouge">T9602_CAPACITY</code>, default 16, override before the include); the getters then return the means, and <code class="language-plaintext highlighter-rouge">getHumidityMean()</code>, <code class="language-plaintext highlighter-rouge">getHumidityStd()</code>, <code class="language-plaintext highlighter-rouge">getHumiditySterr()</code>, <code class="language-plaintext highlighter-rouge">getHumidityMedian()</code>, the same for temperature, and <code class="language-plaintext highlighter-rouge">getReadingCount()</code> read the stored readings. With <code class="language-plaintext highlighter-rouge">setStats(true)</code> the std and sterr columns join <code class="language-plaintext highlighter-rouge">getHeader()</code> and <code class="language-plaintext highlighter-rouge">getString()</code>. For one row per reading to a file, <code class="language-plaintext highlighter-rouge">beginReadings(n)</code>, <code class="language-plaintext highlighter-rouge">printHeader(out)</code>, <code class="language-plaintext highlighter-rouge">logReading(out)</code> n times, <code class="language-plaintext highlighter-rouge">endReadings()</code>, to any <code class="language-plaintext highlighter-rouge">Print</code> (an SdFat <code class="language-plaintext highlighter-rouge">File</code>, <code class="language-plaintext highlighter-rouge">Serial</code>). Requires the <a href="https://github.com/NorthernWidget/NW_Core">NW_Core</a> library.</p>
+<p><code class="language-plaintext highlighter-rouge">setReadings(n)</code> sets how many readings <code class="language-plaintext highlighter-rouge">updateMeasurements()</code> takes (each is its own measurement cycle, so they are independent; clamped to <code class="language-plaintext highlighter-rouge">T9602_CAPACITY</code>, default 16, override before the include); the getters then return the means, and <code class="language-plaintext highlighter-rouge">getHumidityMean()</code>, <code class="language-plaintext highlighter-rouge">getHumidityStd()</code>, <code class="language-plaintext highlighter-rouge">getHumiditySterr()</code>, <code class="language-plaintext highlighter-rouge">getHumidityMedian()</code>, the same for temperature, and <code class="language-plaintext highlighter-rouge">getReadingCount()</code> read the stored readings. With <code class="language-plaintext highlighter-rouge">setStats(true)</code> the std and sterr columns join <code class="language-plaintext highlighter-rouge">printDataHeader()</code> and <code class="language-plaintext highlighter-rouge">printDataRow()</code>. For one row per reading to a file, <code class="language-plaintext highlighter-rouge">beginReadings(n)</code>, <code class="language-plaintext highlighter-rouge">printHeader(out)</code>, <code class="language-plaintext highlighter-rouge">logReading(out)</code> n times, <code class="language-plaintext highlighter-rouge">endReadings()</code>, to any <code class="language-plaintext highlighter-rouge">Print</code> (an SdFat <code class="language-plaintext highlighter-rouge">File</code>, <code class="language-plaintext highlighter-rouge">Serial</code>). Requires the <a href="https://github.com/NorthernWidget/NW_Core">NW_Core</a> library.</p>
 
 <h3 id="northern-widget-margay-code">Northern Widget Margay code</h3>
 
 <p>The <a href="github.com/NorthernWidget-Skunkworks/Project-Margay">Margay data logger</a> is the lightweight and low-power open-source data-logging option from Northern Widget. It saves data to a local SD card and includes on-board status measurements and a low-drift real-time clock. We have written <a href="github.com/NorthernWidget-Skunkworks/Margay_Library">a library to interface with the Margay</a>, which can in turn be used to link the Margay with sensors.</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Include the T9602 library</span>
-<span class="cp">#include</span> <span class="cpf">"Margay.h"</span><span class="cp">
-#include</span> <span class="cpf">"T9602.h"</span><span class="cp">
-</span>
-<span class="c1">// Declare variables -- just as strings</span>
-<span class="n">String</span> <span class="n">header</span><span class="p">;</span>
-<span class="n">String</span> <span class="n">data</span><span class="p">;</span>
+<p><strong>A Margay cannot yet hold a T9602.</strong> A logger writes its file from the sensors <code class="language-plaintext highlighter-rouge">watch()</code> gave it, and <code class="language-plaintext highlighter-rouge">watch()</code> takes an <code class="language-plaintext highlighter-rouge">NW_Sensor</code>: a device that names itself in Page 0 and reports through the Schema 1 Report register (<a href="https://github.com/NorthernWidget/NW-Device-Specification/blob/master/LIBRARY-DESIGN.md">LIBRARY-DESIGN.md</a> section 14). The T9602 is an Amphenol part with neither, so this sketch logs the logger’s own on-board columns and prints the T9602’s to the serial monitor; its columns do not reach the card. Read that as the open end of the work rather than as the intended shape.</p>
 
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Include the T9602 library</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Margay.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;T9602.h&gt;</span><span class="cp">
+</span>
 <span class="c1">// Instantiate classes</span>
 <span class="n">T9602</span> <span class="n">mySensor</span><span class="p">;</span>
-<span class="n">Margay</span> <span class="nf">Logger</span><span class="p">(</span><span class="n">Model_2v0</span><span class="p">,</span> <span class="n">Build_B</span><span class="p">);</span> <span class="c1">// Margay v2.2; UPDATE CODE TO INDICATE THIS</span>
-
-<span class="c1">// Empty header to start; will include sensor labels and information</span>
-<span class="n">String</span> <span class="n">Header</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
-
-<span class="c1">// I2C address for T9602</span>
-<span class="kt">uint8_t</span> <span class="n">I2CVals</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mh">0x28</span><span class="p">};</span>
+<span class="n">Margay</span> <span class="nf">Logger</span><span class="p">(</span><span class="n">MODEL_2v0</span><span class="p">,</span> <span class="n">BUILD_B</span><span class="p">);</span> <span class="c1">// Margay v2.2; UPDATE CODE TO INDICATE THIS</span>
 
 <span class="c1">//Number of seconds between readings</span>
 <span class="kt">uint32_t</span> <span class="n">updateRate</span> <span class="o">=</span> <span class="mi">60</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="nf">setup</span><span class="p">(){</span>
-    <span class="n">Header</span> <span class="o">=</span> <span class="n">Header</span> <span class="o">+</span> <span class="n">mySensor</span><span class="p">.</span><span class="n">getHeader</span><span class="p">();</span>
-    <span class="n">Logger</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">I2CVals</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">I2CVals</span><span class="p">),</span> <span class="n">Header</span><span class="p">);</span>
-    <span class="n">initialize</span><span class="p">();</span>
+    <span class="n">mySensor</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+    <span class="n">mySensor</span><span class="p">.</span><span class="n">printDataHeader</span><span class="p">(</span><span class="n">Serial</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+    <span class="n">Logger</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="nf">loop</span><span class="p">(){</span>
-    <span class="n">initialize</span><span class="p">();</span>
-    <span class="n">Logger</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">updateRate</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">String</span> <span class="nf">update</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">initialize</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">mySensor</span><span class="p">.</span><span class="n">getString</span><span class="p">();</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">initialize</span><span class="p">(){</span>
-    <span class="n">mySensor</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+    <span class="n">Logger</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">updateRate</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
